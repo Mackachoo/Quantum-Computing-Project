@@ -81,8 +81,6 @@ def kroneckerProduct(matA,matB):
     for i in range(matZ.shape[0]):
         for j in range(matZ.shape[1]):
             print(i,j)
-            #print("a",i,matA.shape[0],"=",i//matB.shape[0],j,matA.shape[1],"=",j//matA.shape[1])
-            #print("b",i,matB.shape[0],j,matB.shape[0],"=",matB[i%matB.shape[0]][j%matB.shape[1]])
             matZ[i][j] = matA[i//matB.shape[0]][j//matB.shape[1]]*matB[i%matB.shape[0]][j%matB.shape[1]]
     return matZ
 

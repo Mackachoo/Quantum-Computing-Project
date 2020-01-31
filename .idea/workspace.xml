@@ -25,8 +25,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/operations.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="344">
-              <caret line="97" column="25" lean-forward="true" selection-start-line="97" selection-start-column="25" selection-end-line="97" selection-end-column="25" />
+            <state relative-caret-position="106">
+              <caret line="83" selection-start-line="83" selection-end-line="83" />
             </state>
           </provider>
         </entry>
@@ -203,7 +203,14 @@
       <option name="project" value="LOCAL" />
       <updated>1580486674658</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Added Tensor and Kronecker Product functions.">
+      <created>1580486873344</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1580486873344</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -231,7 +238,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added a py file with" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added a py file with" />
+    <MESSAGE value="Added Tensor and Kronecker Product functions." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Tensor and Kronecker Product functions." />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/tensorProduct.py">
@@ -257,8 +265,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/operations.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="344">
-          <caret line="97" column="25" lean-forward="true" selection-start-line="97" selection-start-column="25" selection-end-line="97" selection-end-column="25" />
+        <state relative-caret-position="106">
+          <caret line="83" selection-start-line="83" selection-end-line="83" />
         </state>
       </provider>
     </entry>
