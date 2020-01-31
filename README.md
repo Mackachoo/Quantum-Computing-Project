@@ -1,2 +1,2 @@
-# Quantum-Computing-Project
+# Quantum Computing Project
 #Dan the Man
