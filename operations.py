@@ -92,7 +92,7 @@ def kroneckerProduct(matA,matB):
 A = np.array([[1,2,4],[7,5,2]])
 B = np.array([[5,6],[3,8]])
 
-A = np.array([4,8,3])
-B = np.array([5,6,8])
+A = np.array([1,2,3])
+B = np.array([4,5])
 
 print(tensorProduct(A,B))
