@@ -1,9 +1,5 @@
 import numpy as np
 
-A = np.array([[3,4],[7,2],[9,1]])
-B = np.array([[1,2,3],[5,6,7]])
-C = np.array([[2,3,6],[6,2,5],[3,6,3]])
-
 
 ### Matrix Addition!   -------------------------------------------------------------------------------------------------
 
@@ -66,3 +62,37 @@ def matrixInv(mat):
                 matN = np.delete(matN, j, 0)
                 matZ[i][j] = (1/det)*(1-2*((i+j)%2))*matrixDet(matN)
         return matZ
+
+
+### Tensor Product   ---------------------------------------------------------------------------------------------------
+
+def tensorProduct(vecA,vecB):
+    matA = np.zeros((len(vecA),1))
+    matB = np.array([vecB])
+    for i in range(len(vecA)):
+        matA[i][0] = vecA[i]
+    return kroneckerProduct(matA,matB)
+
+
+def kroneckerProduct(matA,matB):
+    print()
+    matZ = np.zeros((matA.shape[0]*matB.shape[0], matA.shape[1]*matB.shape[1]))
+    print(matZ)
+    for i in range(matZ.shape[0]):
+        for j in range(matZ.shape[1]):
+            print(i,j)
+            #print("a",i,matA.shape[0],"=",i//matB.shape[0],j,matA.shape[1],"=",j//matA.shape[1])
+            #print("b",i,matB.shape[0],j,matB.shape[0],"=",matB[i%matB.shape[0]][j%matB.shape[1]])
+            matZ[i][j] = matA[i//matB.shape[0]][j//matB.shape[1]]*matB[i%matB.shape[0]][j%matB.shape[1]]
+    return matZ
+
+
+### Testing   ----------------------------------------------------------------------------------------------------------
+
+A = np.array([[1,2,4],[7,5,2]])
+B = np.array([[5,6],[3,8]])
+
+A = np.array([4,8,3])
+B = np.array([5,6,8])
+
+print(tensorProduct(A,B))
