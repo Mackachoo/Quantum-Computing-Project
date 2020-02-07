@@ -75,22 +75,11 @@ def tensorProduct(vecA,vecB):
 
 
 def kroneckerProduct(matA,matB):
-    print()
+    #print()
     matZ = np.zeros((matA.shape[0]*matB.shape[0], matA.shape[1]*matB.shape[1]))
-    print(matZ)
+    #print(matA.shape[0],matA.shape[1],matB.shape[0],matB.shape[1])
     for i in range(matZ.shape[0]):
         for j in range(matZ.shape[1]):
-            print(i,j)
+            #print(i,j)
             matZ[i][j] = matA[i//matB.shape[0]][j//matB.shape[1]]*matB[i%matB.shape[0]][j%matB.shape[1]]
     return matZ
-
-
-### Testing   ----------------------------------------------------------------------------------------------------------
-
-A = np.array([[1,2,4],[7,5,2]])
-B = np.array([[5,6],[3,8]])
-
-A = np.array([1,2,3])
-B = np.array([4,5])
-
-print(tensorProduct(A,B))
