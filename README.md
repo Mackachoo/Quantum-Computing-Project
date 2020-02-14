@@ -17,7 +17,7 @@ DESCRIPTION OF IT HERE
 
 ## Result
 
-The project has corroborated previous results of Grover's time complexity <img src="https://render.githubusercontent.com/render/math?math=O(\sqrt(N))">  and provided a quadratic speedup with respect to the best classical alternative of $$O(N)$$.
+The project has corroborated previous results of Grover's time complexity <img src="https://render.githubusercontent.com/render/math?math=O(\sqrt(N))">  and provided a quadratic speedup with respect to the best classical alternative of  <img src="https://render.githubusercontent.com/render/math?math=O(N)"> .
 
 ## Authors
 
