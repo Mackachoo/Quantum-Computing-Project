@@ -19,8 +19,6 @@ DESCRIPTION OF IT HERE
 
 The project has corroborated previous results of Grover's time complexity <img src="https://render.githubusercontent.com/render/math?math=O(\sqrt(N))">  and provided a quadratic speedup with respect to the best classical alternative of <img src="https://render.githubusercontent.com/render/math?math=O(N)"> .
 
-<img src="https://render.githubusercontent.com/render/math?math=e^{i %2B\pi} =x%2B1">
-
 ## Authors
 
 - Dan Buxton
