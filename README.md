@@ -2,7 +2,7 @@
 #Dan the Man
 
 
-# Authors
+## Authors
 
 - Dan Buxton
 - Tommaso Bruggi
