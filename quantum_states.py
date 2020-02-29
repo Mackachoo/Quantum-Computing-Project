@@ -27,7 +27,6 @@ class QubitState(ABC):
         self.ket = ket
 
         self.strRep = ""
-        self.mathRep = np.zeros(len(values))
 
     @property
     def nQubits(self):
@@ -64,7 +63,7 @@ class QubitState(ABC):
 
 
 
-class Qubit(QubitState):
+class Register(QubitState):
     """A multi-qubit ket in the computational (z) basis.
 
     We use the normal binary convention that the least significant qubit is on the
@@ -89,25 +88,23 @@ class Qubit(QubitState):
     def __init__(self, values, ket=True):
 
         super().__init__(values, ket)
-        d = values[1]
-        bi = bin(values[0])
-        binary = [int(n) for n in bi[2:]]
+        d = 2**values[1]
+
+        if values[0]>d-1:
+            raise InputError("State can't be represented with given number of qubits")
 
         #Implement Vector Representation (<0| = [1,0], <3| = [0,0,0,1])
         vr = np.zeros(d)
-        vr[int(bi,2)] = 1
-        self.bin = binary
+        vr[values[0]] = 1
         self.vec = vr
 
+        bi = bin(values[0])
+        binary = [int(n) for n in bi[2:].zfill(values[1])]
+        self.bin = binary
+
+
         for i, val in enumerate(self.bin):
-            if int(val) == 1:
-                self.strRep += str(val)
-                self.mathRep[i] = val
-            elif int(val) == 0:
-                self.strRep += str(val)
-                self.mathRep[i] = val
-            else:
-                raise InputError("Can only accept sequence of 1s and 0s")
+            self.strRep += str(val)
 
     def flip(self):
         """ TODO: Flip the ket to a bra"""
@@ -122,31 +119,14 @@ class Qubit(QubitState):
         return super().__str__()
 
 
-class IntQubit(QubitState):
+class State():
+    """ Superposition of registers """
+    def __init__():
 
-    def __init__(self, value, ket=True):
-        super().__init__(value, ket)
-        if type(value) == int:
-            self.strRep = str(value)
-        else:
-            raise InputError("Can only accept an integer label for the qubit")
 
-    def flip(self):
-        """ TODO: Flip the ket to a bra"""
-        super()
-
-    def dotWith(self, ket):
-        """ TODO: Implement dot product with another ket"""
-        pass
-
-    def __str__(self):
-        """TODO: ensure representation is appropiate"""
-        return super().__str__()
 
 #-----------------------
 #TESTS
 #-----------------------
-bit = Qubit([0,0,1], ket=False)
-bit2 = Qubit("010")
+bit = Register((0,2), ket=True)
 print(bit)
-print(bit2)

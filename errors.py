@@ -16,6 +16,5 @@ class InputError(Error):
         message -- explanation of the error
     """
 
-    def __init__(self, expression, message):
+    def __init__(self, expression):
         self.expression = expression
-        self.message = message
