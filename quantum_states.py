@@ -74,13 +74,32 @@ class Qubit(QubitState):
     ==========
 
     values : list, str
-        The qubit values as a list of ints ([0,0,0,1,1]) or a string ('011').
+
+        The qubit values as a list of ints: ([0,0,0,1,1]), a string: ('011'),
+        or a tuple: (3,3) = [0, 1, 1].
+
+        First tuple element is the representation of the state in denary
+        second element is the dimensionality of our state space (i.e. # of elements in the vector).
+        e.g.
+        (1, 4) = [0,0,0,1]
+        (0, 4) = [0,0,0,0]
+        (9, 4) = [1,0,0,1]
     """
 
     def __init__(self, values, ket=True):
 
         super().__init__(values, ket)
-        for i, val in enumerate(values):
+        d = values[1]
+        bi = bin(values[0])
+        binary = [int(n) for n in bi[2:]]
+
+        #Implement Vector Representation (<0| = [1,0], <3| = [0,0,0,1])
+        vr = np.zeros(d)
+        vr[int(bi,2)] = 1
+        self.bin = binary
+        self.vec = vr
+
+        for i, val in enumerate(self.bin):
             if int(val) == 1:
                 self.strRep += str(val)
                 self.mathRep[i] = val
