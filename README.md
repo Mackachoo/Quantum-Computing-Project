@@ -8,17 +8,12 @@ Quantum  computers  could  spur  the  development  of  new  breakthroughs  in  s
 
 ## Description
 
-A simulation of a quantum computer was implemented on a classical computer using the Python programming language. All basic components of a quantum computer were created and Grover’s quantum search algorithm was implemented and successfully run.
-
-## Grover's algorithm
-
-DESCRIPTION OF IT HERE 
+A simulation of a quantum computer was implemented on a classical computer using the Python programming language. All basic components of a quantum computer were created and Grover’s quantum search algorithm was implemented and successfully run, without using any scpecialized quantum computing libraries.
 
 ## Result
 
-## Grover's algorithm
-
 The project has corroborated previous results of Grover's time complexity <img src="https://render.githubusercontent.com/render/math?math=O(\sqrt(N))">  and provided a quadratic speedup with respect to the best classical alternative of <img src="https://render.githubusercontent.com/render/math?math=O(N)"> .
+
 ## Authors
 
 - Dan Buxton
