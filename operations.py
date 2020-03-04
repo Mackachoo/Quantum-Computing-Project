@@ -86,7 +86,7 @@ def kroneckerProduct(matA,matB):
             matZ[i][j] = matA[i//matB.shape[0]][j//matB.shape[1]]*matB[i%matB.shape[0]][j%matB.shape[1]]
     return matZ
 
-### Helper Fucntions ----------------------------------------------------------------------------------------------------
+### Helper Functions ----------------------------------------------------------------------------------------------------
 def vecToState(vec):
     """TODO: takes vector spits out tuple (denary, dimension)"""
     pass
