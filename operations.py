@@ -65,13 +65,15 @@ def matrixInv(mat):
 
 
 ### Tensor Product   ---------------------------------------------------------------------------------------------------
-
+#Input lists (e.g. if in 4d space, |2> = [0,0,1,0])
 def tensorProduct(vecA,vecB):
-    matA = np.zeros((len(vecA),1))
-    matB = np.array([vecB])
-    for i in range(len(vecA)):
-        matA[i][0] = vecA[i]
-    return kroneckerProduct(matA,matB)
+    lA = len(vecA)
+    lB = len(vecB)
+    T = np.zeros(lA*lB)
+    for i in range (lA):
+        for j in range (lB):
+            T[i*lB+j] = vecA[i]*vecB[j]
+    return T
 
 
 def kroneckerProduct(matA,matB):
@@ -83,3 +85,8 @@ def kroneckerProduct(matA,matB):
             #print(i,j)
             matZ[i][j] = matA[i//matB.shape[0]][j//matB.shape[1]]*matB[i%matB.shape[0]][j%matB.shape[1]]
     return matZ
+
+### Helper Fucntions ----------------------------------------------------------------------------------------------------
+def vecToState(vec):
+    """TODO: takes vector spits out tuple (denary, dimension)"""
+    pass
