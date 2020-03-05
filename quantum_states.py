@@ -107,7 +107,7 @@ class Register(QubitState):
             self.strRep += str(val)
 
     def flip(self):
-        """ TODO: Flip the ket to a bra"""
+        """ TODO: Flip the ket to a bra."""
         self.ket = False
 
     def dotWith(self, ket):
