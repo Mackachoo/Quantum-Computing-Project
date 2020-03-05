@@ -88,6 +88,7 @@ class Register(QubitState):
     def __init__(self, values, ket=True):
 
         super().__init__(values, ket)
+        self.values = values
         self.d = 2**values[1]
 
         if values[0]>self.d-1:
@@ -129,4 +130,4 @@ class Register(QubitState):
 #TESTS
 #-----------------------
 #bit = Register((0,2), ket=True)
-#print(bit.strRep)
+#print(bit)
