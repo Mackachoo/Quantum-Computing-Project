@@ -3,7 +3,7 @@ import numpy as np
 
 ### Matrix Addition!   -------------------------------------------------------------------------------------------------
 
-def matrixAdder(matA,matB):
+def matrixSum(matA,matB):
     if matA.shape != matB.shape:
         print("Non NxN matching matrices")
     else:
@@ -16,9 +16,9 @@ def matrixAdder(matA,matB):
 
 ### Matrix multiplication!   -------------------------------------------------------------------------------------------
 
-def matrixMulti(matA,matB):
+def matrixProduct(matA,matB):
     if matA.shape[1] != matB.shape[0]:
-        print("Non axN Nxb matching matrices")
+        print(f"Non axN Nxb matching matrices : {matA.shape[0]}x{matA.shape[1]} and {matB.shape[0]}x{matB.shape[1]}")
     else:
         matZ = np.zeros((matA.shape[0],matB.shape[1]))
         for i in range(matZ.shape[0]):
@@ -90,3 +90,7 @@ def kroneckerProduct(matA,matB):
 def vecToState(vec):
     """TODO: takes vector spits out tuple (denary, dimension)"""
     pass
+
+def vecMatProduct(mat,vec):
+    vecR = np.resize(vec,(len(vec),1))
+    return matrixProduct(mat,vecR)

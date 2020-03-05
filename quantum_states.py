@@ -130,4 +130,4 @@ class Register(QubitState):
 #TESTS
 #-----------------------
 #bit = Register((0,2), ket=True)
-#print(bit)
+#print(bit.bin)
