@@ -57,9 +57,9 @@ class QubitState(ABC):
         """TODO: ensure representation is appropiate"""
 
         if self.ket == True:
-            return("|" + self.strRep + ">")
+            return(f"|{self.strRep}>")
         else:
-            return("<" + self.strRep + "|")
+            return(f"<{self.strRep}|")
 
 
 
