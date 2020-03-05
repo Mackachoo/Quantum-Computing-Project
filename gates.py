@@ -38,10 +38,10 @@ def CNOT(signVector):
 
 # Testing # --------------------------------------------------------------------
 
-test = hdm.hadamardInterpretation(qs.Register((1, 2)))
-print(test)
-print()
-print(CNOT(test.signVector))
-test.applyGate(CNOT)
-print()
-print(test)
+#test = hdm.hadamardInterpretation(qs.Register((1, 2)))
+#print(test)
+#print()
+#print(CNOT(test.signVector))
+#test.applyGate(CNOT)
+#print()
+#print(test)
