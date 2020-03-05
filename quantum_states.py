@@ -57,9 +57,9 @@ class QubitState(ABC):
         """TODO: ensure representation is appropiate"""
 
         if self.ket == True:
-            return("|" + self.strRep + ">")
+            return(f"|{self.strRep}>")
         else:
-            return("<" + self.strRep + "|")
+            return(f"<{self.strRep}|")
 
 
 
@@ -88,22 +88,23 @@ class Register(QubitState):
     def __init__(self, values, ket=True):
 
         super().__init__(values, ket)
-        d = 2**values[1]
+        self.values = values
+        self.d = 2**values[1]
 
-        if values[0]>d-1:
+        if values[0]>self.d-1:
             raise InputError("State can't be represented with given number of qubits")
 
         #Implement Vector Representation (<0| = [1,0], <3| = [0,0,0,1])
-        vr = np.zeros(d)
+        vr = np.zeros(self.d)
         vr[values[0]] = 1
         self.vec = vr
 
         bi = bin(values[0])
         binary = [int(n) for n in bi[2:].zfill(values[1])]
-        self.bin = binary
+        self.bin = np.array(binary)
 
 
-        for i, val in enumerate(self.bin):
+        for val in self.bin:
             self.strRep += str(val)
 
     def flip(self):
@@ -119,14 +120,14 @@ class Register(QubitState):
         return super().__str__()
 
 
-class State():
-    """ Superposition of registers """
-    def __init__():
+#class State():
+#    """ Superposition of registers """
+#    def __init__():
 
 
 
 #-----------------------
 #TESTS
 #-----------------------
-bit = Register((0,2), ket=True)
-print(bit)
+#bit = Register((0,2), ket=True)
+#print(bit.bin)
