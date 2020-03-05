@@ -15,7 +15,8 @@ class hadamardInterpretation():
     def __init__(self,qRegister):
         self.qR = qRegister
 
-        self.vecRep = self.vectorRepresenation(self.qR.bin, np.array([1]))
+        self.signVector = self.vectorRepresenation(self.qR.bin, np.array([1],dtype=qs.Register))
+        self.qbitVector = np.array([])
 
     def vectorRepresenation(self,qBinary,vRep):
         if len(qBinary) == 0:
@@ -31,7 +32,7 @@ class hadamardInterpretation():
     def __str__(self):
         output = f"1/√{self.qR.d}(|0>"
         for i in range(1,self.qR.d):
-            if self.vecRep[i] < 0:
+            if self.signVector[i] < 0:
                 output += f"-|{i}>"
             else:
                 output += f"+|{i}>"
@@ -40,5 +41,5 @@ class hadamardInterpretation():
 
 # Testing #
 
-#test = hadamardInterpretation(qs.Register((1, 3)))
-#print(test)
+test = hadamardInterpretation(qs.Register((1, 3)))
+print(test)
