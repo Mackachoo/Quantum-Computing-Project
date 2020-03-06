@@ -94,4 +94,4 @@ def vecToState(vec):
 def vecMatProduct(mat,vec):
     """TODO: takes a matrix and a single array vector and formats them for the matrixProduct() function."""
     vecR = np.resize(vec,(len(vec),1))
-    return matrixProduct(mat,vecR)
+    return matrixProduct(mat,vecR)[:,0]
