@@ -89,19 +89,19 @@ class Register(QubitState):
 
         super().__init__(values, ket)
         self.values = values
-        self.d = 2**values[1]
+        self.d = 2**values[1]    #number of qubits
+        self.int = values[0]     #Integer representation of register
 
-        if values[0]>self.d-1:
+        if self.int>self.d-1:
             raise InputError("State can't be represented with given number of qubits")
 
-        #Implement Vector Representation (<0| = [1,0], <3| = [0,0,0,1])
+        #Implement Vector Representation (|0> = [1,0], |3> = [0,0,0,1])
         vr = np.zeros(self.d)
-        vr[values[0]] = 1
-        self.vec = vr
+        vr[self.int] = 1
+        self.vec = np.array(vr)
 
-        bi = bin(values[0])
-        binary = [int(n) for n in bi[2:].zfill(values[1])]
-        self.bin = np.array(binary)
+        bi = bin(self.int)
+        self.bin = np.array([int(n) for n in bi[2:].zfill(values[1])])
 
 
         for val in self.bin:
@@ -120,14 +120,22 @@ class Register(QubitState):
         return super().__str__()
 
 
-#class State():
-#    """ Superposition of registers """
-#    def __init__():
+class State():
+    """ General superposition of registers """
+    def __init__(self, vector):
+        s = len(vector)
+        self.st = np.array([(Register((i, s)), vector[i]) for i in range (s)])
+        self.vec = vector
 
+    def normalise(self):
+        """ Implement normalisation"""
 
 
 #-----------------------
 #TESTS
 #-----------------------
-#bit = Register((0,2), ket=True)
-#print(bit.bin)
+R1 = Register((0,2))
+R2 = Register((1,2))
+V = R1.vec + R2.vec
+S1 = State(V)
+print(R1.vec)
