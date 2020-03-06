@@ -11,20 +11,20 @@ def singleH():
     """TODO: This could be the single hadamard gate.""" 
     pass
 
-def CNOTdepreciated(signVector):
+def CNOTdepreciated():
     """TODO: This will be the CNOT gate."""
     matrix = np.array([[1,0,0,0],
                         [0,1,0,0],
                         [0,0,0,1],
                         [0,0,1,0]])
-    return op.vecMatProduct(matrix,signVector)
+    return matrix
 
-def NOT(signVector):                                ### This is Pauli X ?
+def NOT():                                ### This is Pauli X ?
     """TODO: This will be the NOT gate."""
     matrix = np.array([[0,1],
                        [1,0]])
 
-    return op.vecMatProduct(matrix,signVector)
+    return matrix
 
 def controlGate(gate, signVector):
     if len(signVector) == 2:
@@ -38,7 +38,7 @@ def CNOT(signVector):
 
 # Testing # --------------------------------------------------------------------
 
-test = hdm.hadamardInterpretation(qs.Register((1, 2)))
+test = hdm.hadamardInterpretation(qs.Register((0, 2)))
 print(test)
 print()
 print(CNOT(test.signVector))
