@@ -134,8 +134,3 @@ class State():
 #-----------------------
 #TESTS
 #-----------------------
-R1 = Register((0,2))
-R2 = Register((1,2))
-V = R1.vec + R2.vec
-S1 = State(V)
-print(R1.vec)

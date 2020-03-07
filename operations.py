@@ -1,5 +1,20 @@
 import numpy as np
+import quantum_states as qs
+import math as m
 
+gates = {
+
+    'H' : 1/m.sqrt(2)*np.array([[1,1],
+                               [1,-1]]),
+    'I' : np.identity(2),
+    'X' : np.array([[0,1],
+                   [1,0]]),
+    'Y' : np.array([[0,-1j],
+                   [1j,0]]),
+    'Z' : np.array([[1,0],
+                   [0,-1]])
+
+}
 
 ### Matrix Addition!   -------------------------------------------------------------------------------------------------
 
@@ -86,12 +101,33 @@ def kroneckerProduct(matA,matB):
             matZ[i][j] = matA[i//matB.shape[0]][j//matB.shape[1]]*matB[i%matB.shape[0]][j%matB.shape[1]]
     return matZ
 
+
 ### Helper Functions ----------------------------------------------------------------------------------------------------
 def vecToState(vec):
     """TODO: takes vector spits out tuple (denary, dimension)"""
     pass
 
+
 def vecMatProduct(mat,vec):
     """TODO: takes a matrix and a single array vector and formats them for the matrixProduct() function."""
     vecR = np.resize(vec,(len(vec),1))
     return matrixProduct(mat,vecR)[:,0]
+
+
+def constructGate(code):
+    matrix = np.array([[1]])
+    TofN = 0
+    for char in code:
+        if char.isdigit():
+            TofN = int(char)
+        elif TofN != 0:
+            Tof = np.identity(2**TofN)
+            gate = gates[char]
+            for x in range(len(gates)):
+                for y in range(len(gates)):
+                    Tof[len(Tof)-len(gate)+x%len(gate)][len(Tof)-len(gate)+y%len(gate)] = gate[x%len(gate)][y%len(gate)]
+            matrix = kroneckerProduct(matrix,Tof)
+            TofN = 0
+        else:
+            matrix = kroneckerProduct(matrix,gates[char])
+    return matrix
