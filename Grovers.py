@@ -24,10 +24,10 @@ def Oracle(nq, s):
 
 def Hadamard(nq):
     """Constructs the Hadamard gate (that is to be applied to all qubits)"""
-    H_code = ''
-    for i in range (nq):
-        H_code += 'H'
-    H = op.constructGate(H_code)
+#    H_code = ''
+#    for i in range (nq):
+#        H_code += 'H'
+    H = op.constructGate('H'*nq)
     return H
 
 
