@@ -5,6 +5,7 @@ Contains all functions used to implement grover's algorithm
 import operations as op
 import state as st
 import quantum_states as qs
+import numpy as np
 
 def Oracle(nq, s):
     """ Returns the oracle gate for mode s, with # of qubits nq """
@@ -32,41 +33,46 @@ def Diffuser(nq):
     return op.matrixProduct(op.matrixProduct(L,Z), L)
 
 
-""" ----------------------------Tests for Quantum Error---------------------------"""
-s = int(input("which state are you looking for?: "))
+""" ----------------------------Tests for Grover's and Quantum Error---------------------------"""
+s = int(input('\n' + "which state are you looking for?: "))
 nq = int(input("number of qubits: "))
 
-print("Making gates")
+print('\n'+"Making gates" + '\n')
+
+print("Making Hadamard")
 H = Hadamard(nq)
+print("Making Oracle")
 Orac = Oracle(nq, s)
+print("Making Diffuser" + '\n')
 Diff = Diffuser(nq)
 
-print("Initialising system")
+print("Initialising State" + '\n')
 S = st.state(qs.Register((0,nq)))
 S.applyGate(H)
 print(S)
 
-it = round(np.pi/4*np.sqrt(nq))
-print(f"Running Grover's, {it} times")
+it = 4*int(round(np.pi/(4*np.arcsin(1/np.sqrt(nq)))))
+print('\n'+ f"Running Grover's, {it} times:")
 for i in range(it):
     S.applyGate(Orac)
     S.applyGate(H)
     S.applyGate(Diff)
     S.applyGate(H)
+    print('\n' + f"State after iteration no. {i+1}")
     print(S)
 
 Obs = []
 States = [f"|{bin(i)[2:].zfill(nq)}>" for i in range(2**nq)]
 freq = []
 
-n = 100
+n = 10000
 for i in range(n):
     Obs.append(S.observe())
 
 for s in States:
     freq.append(Obs.count(s))
 
-print("# of Occurances:")
+print(f"# of Occurances of each state after observing the system {n} times:")
 for i in range(len(freq)):
     print(f"{States[i]}: {freq[i]}")
 

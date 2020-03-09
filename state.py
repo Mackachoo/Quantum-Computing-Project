@@ -4,7 +4,6 @@ import math as m
 import operations as op
 from random import random as rnd
 
-
 """
 This runs a quantum register through a hadamard gate and then keeps it in the representation.
 Representation :
