@@ -8,7 +8,7 @@ import quantum_states as qs
 import numpy as np
 
 def Oracle(nq, s):
-    """ Returns the oracle gate for mode s, with # of qubits nq """
+    """ Returns the oracle gate when looking for mode s, with # of qubits nq """
     Tr = bin(s)[2:].zfill(nq)
     Neg = ""       #Stores the code for the Left and Rightmost layers (i.e. for |0> we get all 'XX')
     for i in Tr:
