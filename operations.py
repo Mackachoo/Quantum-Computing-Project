@@ -115,6 +115,7 @@ def vecMatProduct(mat,vec):
 
 
 def constructGate(code):
+    """ This takes a code representing the gates at each qubit and returns an array representing the operation"""
     matrix = np.array([[1]])
     TofN = 0
     for char in code:

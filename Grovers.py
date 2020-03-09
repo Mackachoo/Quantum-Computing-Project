@@ -28,6 +28,7 @@ def Hadamard(nq):
 
 
 def Diffuser(nq):
+    """ Returns the Diffuser or Grover's gate for # of qubits nq """
     L = op.constructGate("X"*nq)   #Constructs the matrices representing the leftmost and rightmost operations
     Z = op.constructGate(f"{nq}Z")  #Constructs the nq-dimansional CNOT gate (middle layer)
     return np.dot(np.dot(L, Z), L)
@@ -65,6 +66,9 @@ Obs = []
 States = [f"|{bin(i)[2:].zfill(nq)}>" for i in range(2**nq)]
 freq = []
 
+"""
+"Uncertainty" is simulated using a Monte-Carlo like approach.
+"""
 n = 100000
 for i in range(n):
     Obs.append(S.observe())

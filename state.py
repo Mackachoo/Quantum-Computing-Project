@@ -5,17 +5,21 @@ import operations as op
 from random import random as rnd
 
 """
-This runs a quantum register through a hadamard gate and then keeps it in the representation.
-Representation :
-    H = (1/√2ⁿ)*Σ registers[i]
-      = fⁿ(signVector ᛫ qbitVector)
-        where (1/√2ⁿ) is the normalisation factor fⁿ.
+-Class to represent the general state of the register at any point in time
+-Receives a pure state as its input (can only be initialised as a pure state, like in real life)
+-Main representation is the list self.signVector where all the coefficients for the modes are stored.
+e.g
+|s> = -0.2|0> + 0.9|1>, has
+self.signVector = [-0.2, 0.9], and
+self.qbitVector = [Register(0,1), Register(1,1)] (i.e. a list of pure "modes" [|0>, |1>])
+
 """
 
 
 class state():
 
     def __init__(self,input):
+
         self.qR = input                                                                                 # Stores the input quantum register.
 
         self.signVector = self.qR.vec                                                                   # This creates the signVector by calling vectorRepresentation().
@@ -23,6 +27,7 @@ class state():
 
 
     def applyGate(self, gate):
+        """ Operates the matrix "gate" onto the state, (simple matrix-vector multiplication)"""
         self.signVector = np.dot(gate, self.signVector)
 
     def observe(self):
@@ -38,7 +43,12 @@ class state():
                 return (f"{self.qbitVector[i]}")
 
     def __str__(self):
-        """TODO: allows hadamard class to be printed nicely."""
+        """TODO: allows hadamard class to be printed nicely.
+        Representation :
+            H = (1/√2ⁿ)*Σ registers[i]
+              = fⁿ(signVector ᛫ qbitVector)
+                where (1/√2ⁿ) is the normalisation factor fⁿ.
+        """
 #        power = m.log2(len(self.signVector))
 #        sqrt2 = ""
 #        if power%2 == 1:
