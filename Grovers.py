@@ -27,16 +27,7 @@ def Hadamard(nq):
     return H
 
 
-def Diffuser(nq,s):
-    """ Returns the oracle gate for mode s, with # of qubits nq """
-    Tr = bin(s)[2:]
-    Tr = Tr.zfill(nq)
-    Neg = ""       #Stores the code for the Left and Rightmost layers (i.e. for |0> we get all 'XX')
-    for i in Tr:
-        if i == '0':
-            Neg+="Z"
-        else:
-            Neg+="I"
+def Diffuser(nq):
     L = op.constructGate("X"*nq)   #Constructs the matrices representing the leftmost and rightmost operations
     Z = op.constructGate(f"{nq}Z")  #Constructs the nq-dimansional CNOT gate (middle layer)
     return -op.matrixProduct(op.matrixProduct(L,Z), L)
@@ -49,7 +40,7 @@ nq = int(input("number of qubits: "))
 #Make gates
 H = Hadamard(nq)
 Orac = Oracle(nq, s)
-Diff = Diffuser(nq, s)
+Diff = Diffuser(nq)
 
 #Show them for the eyes of the world
 print("Hadamard: ")
