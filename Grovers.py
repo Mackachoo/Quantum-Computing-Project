@@ -30,7 +30,7 @@ def Hadamard(nq):
 def Diffuser(nq):
     L = op.constructGate("X"*nq)   #Constructs the matrices representing the leftmost and rightmost operations
     Z = op.constructGate(f"{nq}Z")  #Constructs the nq-dimansional CNOT gate (middle layer)
-    return -op.matrixProduct(op.matrixProduct(L,Z), L)
+    return op.matrixProduct(op.matrixProduct(L,Z), L)
 
 
 ##___________________________________Demonstration______________________________##
