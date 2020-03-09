@@ -18,7 +18,7 @@ def Oracle(nq, s):
             Neg+="I"
     L = op.constructGate(Neg)   #Constructs the matrices representing the leftmost and rightmost operations
     Z = op.constructGate(f"{nq}Z")  #Constructs the nq-dimansional CNOT gate (middle layer)
-    return op.matrixProduct(op.matrixProduct(L, Z), L)
+    return np.dot(np.dot(L, Z), L)
 
 
 def Hadamard(nq):
@@ -30,7 +30,7 @@ def Hadamard(nq):
 def Diffuser(nq):
     L = op.constructGate("X"*nq)   #Constructs the matrices representing the leftmost and rightmost operations
     Z = op.constructGate(f"{nq}Z")  #Constructs the nq-dimansional CNOT gate (middle layer)
-    return op.matrixProduct(op.matrixProduct(L,Z), L)
+    return np.dot(np.dot(L, Z), L)
 
 
 """ ----------------------------Tests for Grover's and Quantum Error---------------------------"""
@@ -51,7 +51,7 @@ S = st.state(qs.Register((0,nq)))
 S.applyGate(H)
 print(S)
 
-it = 4*int(round(np.pi/(4*np.arcsin(1/np.sqrt(nq)))))
+it = int(np.pi/(4*np.arcsin(1/np.sqrt(2**nq))))
 print('\n'+ f"Running Grover's, {it} times:")
 for i in range(it):
     S.applyGate(Orac)
@@ -65,14 +65,14 @@ Obs = []
 States = [f"|{bin(i)[2:].zfill(nq)}>" for i in range(2**nq)]
 freq = []
 
-n = 10000
+n = 100000
 for i in range(n):
     Obs.append(S.observe())
 
 for s in States:
     freq.append(Obs.count(s))
 
-print(f"# of Occurances of each state after observing the system {n} times:")
+print('\n' + f"# of Occurances of each state after observing the system {n} times:")
 for i in range(len(freq)):
     print(f"{States[i]}: {freq[i]}")
 

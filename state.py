@@ -23,7 +23,7 @@ class state():
 
 
     def applyGate(self, gate):
-        self.signVector = op.vecMatProduct(gate, self.signVector)
+        self.signVector = np.dot(gate, self.signVector)
 
     def observe(self):
         """
@@ -47,9 +47,9 @@ class state():
         output = ""
         for i in range(self.qR.d):
             if self.signVector[i] >= 0:
-                output += f" +{round(self.signVector[i],3)}{self.qbitVector[i]}"
+                output += f" +{round(self.signVector[i],5)}{self.qbitVector[i]}"
             else:
-                output += f" {round(self.signVector[i],2)}{self.qbitVector[i]}"
+                output += f" {round(self.signVector[i],5)}{self.qbitVector[i]}"
         return output
 
 
