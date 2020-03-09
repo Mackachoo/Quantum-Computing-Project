@@ -46,8 +46,8 @@ S = st.state(qs.Register((0,nq)))
 S.applyGate(H)
 print(S)
 
-print(f"Running Grover's, {it} times")
 it = round(np.pi/4*np.sqrt(nq))
+print(f"Running Grover's, {it} times")
 for i in range(it):
     S.applyGate(Orac)
     S.applyGate(H)
