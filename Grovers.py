@@ -8,8 +8,7 @@ import quantum_states as qs
 
 def Oracle(nq, s):
     """ Returns the oracle gate for mode s, with # of qubits nq """
-    Tr = bin(s)[2:]
-    Tr = Tr.zfill(nq)
+    Tr = bin(s)[2:].zfill(nq)
     Neg = ""       #Stores the code for the Left and Rightmost layers (i.e. for |0> we get all 'XX')
     for i in Tr:
         if i == '0':
@@ -30,9 +29,50 @@ def Hadamard(nq):
 def Diffuser(nq):
     L = op.constructGate("X"*nq)   #Constructs the matrices representing the leftmost and rightmost operations
     Z = op.constructGate(f"{nq}Z")  #Constructs the nq-dimansional CNOT gate (middle layer)
-    return -op.matrixProduct(op.matrixProduct(L,Z), L)
+    return op.matrixProduct(op.matrixProduct(L,Z), L)
 
 
+""" ----------------------------Tests for Quantum Error---------------------------"""
+s = int(input("which state are you looking for?: "))
+nq = int(input("number of qubits: "))
+
+print("Making gates")
+H = Hadamard(nq)
+Orac = Oracle(nq, s)
+Diff = Diffuser(nq)
+
+print("Initialising system")
+S = st.state(qs.Register((0,nq)))
+S.applyGate(H)
+print(S)
+
+print(f"Running Grover's, {it} times")
+it = round(np.pi/4*np.sqrt(nq))
+for i in range(it):
+    S.applyGate(Orac)
+    S.applyGate(H)
+    S.applyGate(Diff)
+    S.applyGate(H)
+    print(S)
+
+Obs = []
+States = [f"|{bin(i)[2:].zfill(nq)}>" for i in range(2**nq)]
+freq = []
+
+n = 100
+for i in range(n):
+    Obs.append(S.observe())
+
+for s in States:
+    freq.append(Obs.count(s))
+
+print("# of Occurances:")
+for i in range(len(freq)):
+    print(f"{States[i]}: {freq[i]}")
+
+
+
+"""
 ##___________________________________Demonstration______________________________##
 s = int(input("which state are you looking for?: "))
 nq = int(input("number of qubits: "))
@@ -56,14 +96,5 @@ print(S)
 
 print(f"Then as specified we are looking for state {qs.Register((s,nq))}. After applying the Oracle we have: ")
 S.applyGate(Orac)
-S.applyGate(H)
-S.applyGate(Diff)
-S.applyGate(H)
 print(S)
-S.applyGate(H)
-S.applyGate(Orac)
-S.applyGate(H)
-S.applyGate(Diff)
-S.applyGate(H)
-print(S)
-
+"""
