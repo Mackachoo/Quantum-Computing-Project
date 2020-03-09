@@ -2,6 +2,7 @@
 import quantum_states as qs
 import math as m
 import operations as op
+from random import random as rnd
 
 
 """
@@ -25,6 +26,17 @@ class state():
     def applyGate(self, gate):
         self.signVector = op.vecMatProduct(gate, self.signVector)
 
+    def observe(self):
+        """
+        Randomly colapses the state into one outcome depending on amplitudes
+        """
+        r = rnd() #random number, uniform probability from 0 to 1
+        sum = 0
+        for i in range(self.qR.d):
+            amp = self.signVector[i]
+            sum += amp.real**2 + amp.imag**2
+            if r <= sum:
+                return (f"{self.qbitVector[i]}")
 
     def __str__(self):
         """TODO: allows hadamard class to be printed nicely."""
