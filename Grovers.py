@@ -6,6 +6,7 @@ import operations as op
 import state as st
 import quantum_states as qs
 import numpy as np
+import matplotlib.pyplot as plt
 
 def Oracle(nq, s):
     """ Returns the oracle gate when looking for mode s, with # of qubits nq """
