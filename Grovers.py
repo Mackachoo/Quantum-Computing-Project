@@ -40,9 +40,10 @@ def FrequencyPlot(freq, States):
     plt.bar(xaxis,freq, tick_label=States)
     plt.ylabel("occurrences")
     plt.xlabel("states")
+    plt.xticks(rotation=90)
     plt.title("Plot of Occurrences of Each State")
     for i in range (0, len(States)):
-        plt.annotate(1+freq[i], xy=(i, 1+freq[i]), ha='center', va='bottom')
+        plt.annotate(freq[i], xy=(i, freq[i]), ha='center', va='bottom')
     plt.show()
 
 
