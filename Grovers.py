@@ -42,7 +42,7 @@ def FrequencyPlot(freq, States):
     plt.xlabel("states")
     plt.title("Plot of Occurrences of Each State")
     for i in range (0, len(States)):
-        plt.annotate(freq[i], xy=(i, i+freq[i]), ha='center', va='bottom')
+        plt.annotate(freq[i], xy=(i, 1+freq[i]), ha='center', va='bottom')
     plt.show()
 
 
@@ -81,7 +81,7 @@ freq = []
 """
 "Uncertainty" is simulated using a Monte-Carlo like approach.
 """
-n = 100000
+n = 30
 for i in range(n):
     Obs.append(S.observe())
 
