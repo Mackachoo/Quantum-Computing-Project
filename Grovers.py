@@ -34,6 +34,17 @@ def Diffuser(nq):
     return np.dot(np.dot(L, Z), L)
 
 
+def FrequencyPlot(freq, States):
+    xaxis = list(range(0,len(States)))
+    plt.bar(xaxis,freq, tick_label=States)
+    plt.ylabel("occurrences")
+    plt.xlabel("states")
+    plt.title("Plot of Occurrences of Each State")
+    for i in range (0, len(States)):
+        plt.annotate(freq[i], xy=(i, i+freq[i]), ha='center', va='bottom')
+    plt.show()
+
+
 """ ----------------------------Tests for Grover's and Quantum Error---------------------------"""
 s = int(input('\n' + "which state are you looking for?: "))
 nq = int(input("number of qubits: "))
@@ -80,6 +91,7 @@ print('\n' + f"# of Occurances of each state after observing the system {n} time
 for i in range(len(freq)):
     print(f"{States[i]}: {freq[i]}")
 
+FrequencyPlot(freq, States)
 
 
 """
