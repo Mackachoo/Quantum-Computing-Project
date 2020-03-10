@@ -46,7 +46,7 @@ def FrequencyPlot(freq, States):
     plt.show()
 
 
-""" ----------------------------Tests for Grover's and Quantum Error---------------------------"""
+##----------------------------Tests for Grover's and Quantum Error---------------------------##
 s = int(input('\n' + "which state are you looking for?: "))
 nq = int(input("number of qubits: "))
 
@@ -78,9 +78,9 @@ Obs = []
 States = [f"|{bin(i)[2:].zfill(nq)}>" for i in range(2**nq)]
 freq = []
 
-"""
-"Uncertainty" is simulated using a Monte-Carlo like approach.
-"""
+
+## "Uncertainty" is simulated using a Monte-Carlo like approach.
+
 n = 300
 for i in range(n):
     Obs.append(S.observe())
