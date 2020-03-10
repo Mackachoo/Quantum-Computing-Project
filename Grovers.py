@@ -81,7 +81,7 @@ freq = []
 """
 "Uncertainty" is simulated using a Monte-Carlo like approach.
 """
-n = 30
+n = 300
 for i in range(n):
     Obs.append(S.observe())
 
