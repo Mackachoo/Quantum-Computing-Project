@@ -1,8 +1,29 @@
+import quantum_states as qs
 import numpy as np
-import operations as op
-import sympy
+import grovers as gr
+import register as re
 
-matA = np.array([[3,4],[7,2],[9,1]])
-matB = np.array([[1,2,3,4],[5,6,7,8]])
+##___________________________________Demonstration______________________________##
+s = int(input("which state are you looking for?: "))
+nq = int(input("number of qubits: "))
 
-print(op.kroneckerProduct(matA,matB))
+#Make gates
+H = gr.Hadamard(nq)
+Orac = gr.Oracle(nq, s)
+Diff = gr.Diffuser(nq)
+
+#Show them for the eyes of the world
+print("Hadamard: ")
+print(H)
+print("Oracle: ")
+print(Orac)
+
+#Make Register and apply gates
+S = re.Register(qs.State((0,nq)))
+R.applyGate(H)
+print(f"Starting with the Register in the pure state {qs.State((0,nq))} and applying Hadamard's gate to all qubits once we obtain: ")
+print(S)
+
+print(f"Then as specified we are looking for state {qs.State((s,nq))}. After applying the Oracle we have: ")
+R.applyGate(Orac)
+print(S)
