@@ -1,6 +1,6 @@
 import grovers as gr
 
-n = 300
+n = 1000
 
 s = int(input('\n' + "which state are you looking for?: "))
 nq = int(input("number of qubits: "))

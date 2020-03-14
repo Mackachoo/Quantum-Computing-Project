@@ -5,8 +5,8 @@ import operations as op
 from random import random as rnd
 
 """
--Class to represent the general Register of the register at any point in time
--Receives a pure Register as its input (can only be initialised as a pure Register, like in real life)
+-Class to represent the System (Register) at any point in time
+-Receives a pure state as its input (can only be initialised as a pure state, as in real life)
 -Main representation is the list self.signVector where all the coefficients for the modes are stored.
 e.g
 |s> = -0.2|0> + 0.9|1>, has
@@ -32,15 +32,15 @@ class Register():
 
     def measure(self):
         """
-        Randomly colapses the Register into one state depending on amplitudes
+        Randomly colapses the System into one state depending on amplitudes
         """
         ## "Uncertainty" is simulated using a Monte-Carlo like approach.
         r = rnd() #random number, uniform probability from 0 to 1
         sum = 0
-        for i in range(self.qR.d):
-            amp = self.signVector[i]
-            sum += amp.real**2 + amp.imag**2
-            if r <= sum:
+        for i in range(self.qR.d):  # for i in range (number of states)
+            amp = self.signVector[i] #get the amplitude of the state
+            sum += amp.real**2 + amp.imag**2  #find the probability of it occuring and add it to sum
+            if r <= sum: #if r is in the interval (sum, sum+prob(state)) then "colapse" system to state
                 return (f"{self.qbitVector[i]}")
 
     def __str__(self):

@@ -7,6 +7,7 @@ import register as re
 import quantum_states as qs
 import numpy as np
 import matplotlib.pyplot as plt
+import time
 
 def Oracle(nq, s):
     """ Returns the oracle gate when looking for mode s, with # of qubits nq """
@@ -46,8 +47,8 @@ def Grovers(nq, s):
     #Initialising Register in a uniform superposition
     print("-------Initialising Register-------" + '\n')
     R = re.Register(qs.State((0,nq)))
+    start_time = time.time()
     R.applyGate(H)
-    print(R)
 
     #Iterating it times
     it = int(np.pi/(4*np.arcsin(1/np.sqrt(2**nq))))
@@ -57,9 +58,8 @@ def Grovers(nq, s):
         R.applyGate(H)
         R.applyGate(Diff)
         R.applyGate(H)
-        print('\n'+f"Register after iteration no. {i+1}:")
-        print(R)
-    return R
+    Dt = time.time() - start_time
+    return R, Dt
 
 
 def FrequencyPlot(freq, States):
@@ -80,7 +80,6 @@ Parameters: Register (R), number of times you want to "run" Grover's (n), number
 As the state of the system before observing it, is definite, we don't need to run Grover's each time.
 Just simulate the final measurement using the register.measure() method, that implements a Monte-Carlo approach
 for counting how many times each state was observed in a given number of trials.
-)
 """
 def Observe_System(R, n, nq):
 

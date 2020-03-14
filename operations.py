@@ -103,11 +103,6 @@ def kroneckerProduct(matA,matB):
 
 
 ### Helper Functions ----------------------------------------------------------------------------------------------------
-def vecToState(vec):
-    """TODO: takes vector spits out tuple (denary, dimension)"""
-    pass
-
-
 def vecMatProduct(mat,vec):
     """TODO: takes a matrix and a single array vector and formats them for the matrixProduct() function."""
     vecR = np.resize(vec,(len(vec),1))
@@ -115,7 +110,7 @@ def vecMatProduct(mat,vec):
 
 
 def constructGate(code):
-    """ This takes a code representing the gates at each qubit and returns an array representing the operation"""
+    """ This takes a code representing the gate at each qubit and returns an array representing the operation"""
     matrix = np.array([[1]])
     TofN = 0
     for char in code:
