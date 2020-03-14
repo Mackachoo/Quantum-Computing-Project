@@ -5,35 +5,36 @@ import operations as op
 from random import random as rnd
 
 """
--Class to represent the general state of the register at any point in time
--Receives a pure state as its input (can only be initialised as a pure state, like in real life)
+-Class to represent the general Register of the register at any point in time
+-Receives a pure Register as its input (can only be initialised as a pure Register, like in real life)
 -Main representation is the list self.signVector where all the coefficients for the modes are stored.
 e.g
 |s> = -0.2|0> + 0.9|1>, has
 self.signVector = [-0.2, 0.9], and
-self.qbitVector = [Register(0,1), Register(1,1)] (i.e. a list of pure "modes" [|0>, |1>])
+self.qbitVector = [Register(0,1), Register(1,1)] (i.e. a list of pure "states" [|0>, |1>])
 
 """
 
 
-class state():
+class Register():
 
     def __init__(self,input):
 
         self.qR = input                                                                                 # Stores the input quantum register.
 
         self.signVector = self.qR.vec                                                                   # This creates the signVector by calling vectorRepresentation().
-        self.qbitVector = np.array([qs.Register((i,self.qR.values[1])) for i in range(self.qR.d)])      # This creates a array of the form [|0>,|1>,|2>,...,|2^(dimension)>].
+        self.qbitVector = np.array([qs.State((i,self.qR.values[1])) for i in range(self.qR.d)])      # This creates a array of the form [|0>,|1>,|2>,...,|2^(dimension)>].
 
 
     def applyGate(self, gate):
-        """ Operates the matrix "gate" onto the state, (simple matrix-vector multiplication)"""
+        """ Operates the matrix "gate" on the Register, (simple matrix-vector multiplication)"""
         self.signVector = np.dot(gate, self.signVector)
 
-    def observe(self):
+    def measure(self):
         """
-        Randomly colapses the state into one outcome depending on amplitudes
+        Randomly colapses the Register into one state depending on amplitudes
         """
+        ## "Uncertainty" is simulated using a Monte-Carlo like approach.
         r = rnd() #random number, uniform probability from 0 to 1
         sum = 0
         for i in range(self.qR.d):
@@ -65,7 +66,7 @@ class state():
 
 # Testing # --------------------------------------------------------------------
 
-#test = state(qs.Register((0,2)))
+#test = Register(qs.Register((0,2)))
 #test.applyGate("HH")
 #print()
 #print(test)

@@ -3,7 +3,7 @@ Contains all functions used to implement grover's algorithm
 """
 
 import operations as op
-import state as st
+import register as re
 import quantum_states as qs
 import numpy as np
 import matplotlib.pyplot as plt
@@ -29,10 +29,37 @@ def Hadamard(nq):
 
 
 def Diffuser(nq):
-    """ Returns the Diffuser or Grover's gate for # of qubits nq """
+    """ Returns the Grover's Diffusion operator for # of qubits nq """
     L = op.constructGate("X"*nq)   #Constructs the matrices representing the leftmost and rightmost operations
     Z = op.constructGate(f"{nq}Z")  #Constructs the nq-dimansional CNOT gate (middle layer)
     return np.dot(np.dot(L, Z), L)
+
+def Grovers(nq, s):
+    print('\n'+"-------Making gates------:")
+    print("Making Hadamard")
+    H = Hadamard(nq)
+    print("Making Oracle")
+    Orac = Oracle(nq, s)
+    print("Making Diffusion Operator" + '\n')
+    Diff = Diffuser(nq)
+
+    #Initialising Register in a uniform superposition
+    print("-------Initialising Register-------" + '\n')
+    R = re.Register(qs.State((0,nq)))
+    R.applyGate(H)
+    print(R)
+
+    #Iterating it times
+    it = int(np.pi/(4*np.arcsin(1/np.sqrt(2**nq))))
+    print('\n'+ f"Running Grover's, {it} times:")
+    for i in range(it):
+        R.applyGate(Orac)
+        R.applyGate(H)
+        R.applyGate(Diff)
+        R.applyGate(H)
+        print('\n'+f"Register after iteration no. {i+1}:")
+        print(R)
+    return R
 
 
 def FrequencyPlot(freq, States):
@@ -46,79 +73,29 @@ def FrequencyPlot(freq, States):
         plt.annotate(freq[i], xy=(i, freq[i]), ha='center', va='bottom')
     plt.show()
 
-
-##----------------------------Tests for Grover's and Quantum Error---------------------------##
-s = int(input('\n' + "which state are you looking for?: "))
-nq = int(input("number of qubits: "))
-
-print('\n'+"Making gates" + '\n')
-
-print("Making Hadamard")
-H = Hadamard(nq)
-print("Making Oracle")
-Orac = Oracle(nq, s)
-print("Making Diffuser" + '\n')
-Diff = Diffuser(nq)
-
-print("Initialising State" + '\n')
-S = st.state(qs.Register((0,nq)))
-S.applyGate(H)
-print(S)
-
-it = int(np.pi/(4*np.arcsin(1/np.sqrt(2**nq))))
-print('\n'+ f"Running Grover's, {it} times:")
-for i in range(it):
-    S.applyGate(Orac)
-    S.applyGate(H)
-    S.applyGate(Diff)
-    S.applyGate(H)
-    print('\n' + f"State after iteration no. {i+1}")
-    print(S)
-
-Obs = []
-States = [f"|{bin(i)[2:].zfill(nq)}>" for i in range(2**nq)]
-freq = []
-
-
-## "Uncertainty" is simulated using a Monte-Carlo like approach.
-
-n = 300
-for i in range(n):
-    Obs.append(S.observe())
-
-for s in States:
-    freq.append(Obs.count(s))
-
-print('\n' + f"# of Occurances of each state after observing the system {n} times:")
-for i in range(len(freq)):
-    print(f"{States[i]}: {freq[i]}")
-
-FrequencyPlot(freq, States)
-
-
 """
-##___________________________________Demonstration______________________________##
-s = int(input("which state are you looking for?: "))
-nq = int(input("number of qubits: "))
+Observe the system S, n times. This simulates the "Uncertainty" in the outcome of the observation.
+Parameters: Register (R), number of times you want to "run" Grover's (n), number of qubits(nq).
 
-#Make gates
-H = Hadamard(nq)
-Orac = Oracle(nq, s)
-Diff = Diffuser(nq)
-
-#Show them for the eyes of the world
-print("Hadamard: ")
-print(H)
-print("Oracle: ")
-print(Orac)
-
-#Make state and apply gates
-S = st.state(qs.Register((0,nq)))
-S.applyGate(H)
-print(f"Starting with state {qs.Register((0,nq))} and applying Hadamard's gate to all qubits once we obtain: ")
-print(S)
-
-print(f"Then as specified we are looking for state {qs.Register((s,nq))}. After applying the Oracle we have: ")
-S.applyGate(Orac)
-print(S)
+As the state of the system before observing it, is definite, we don't need to run Grover's each time.
+Just simulate the final measurement using the register.measure() method, that implements a Monte-Carlo approach
+for counting how many times each state was observed in a given number of trials.
+)
 """
+def Observe_System(R, n, nq):
+
+    Obs = []
+    States = [f"|{bin(i)[2:].zfill(nq)}>" for i in range(2**nq)]
+    freq = []
+
+    for i in range(n):
+        Obs.append(R.measure())
+
+    for s in States:
+        freq.append(Obs.count(s))
+
+    print('\n' + f"# of Occurances of each state after measuring the system {n} times:")
+    for i in range(len(freq)):
+        print(f"{States[i]}: {freq[i]}")
+
+    FrequencyPlot(freq, States)
