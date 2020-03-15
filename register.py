@@ -26,10 +26,15 @@ class Register():
         list of individual states.
     Methods
     -------
-    applyGate(gate)
+    applyGate(self, gate)
         operates matrix "gate" on the Register
+    measure(self)
+        collapses register into most probable state
+    __str__(self)
+        string representation of state: |s> = -0.2|0> + 0.9|1>
 
-    e.g
+    Examples
+    --------
     |s> = -0.2|0> + 0.9|1>, has
     self.signVector = [-0.2, 0.9], and
     self.qbitVector = [Register(0,1), Register(1,1)] (i.e. a list of pure "states" [|0>, |1>])
