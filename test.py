@@ -19,11 +19,11 @@ print("Oracle: ")
 print(Orac)
 
 #Make Register and apply gates
-S = re.Register(qs.State((0,nq)))
+R = re.Register(qs.State((0,nq)))
 R.applyGate(H)
 print(f"Starting with the Register in the pure state {qs.State((0,nq))} and applying Hadamard's gate to all qubits once we obtain: ")
-print(S)
+print(R)
 
 print(f"Then as specified we are looking for state {qs.State((s,nq))}. After applying the Oracle we have: ")
 R.applyGate(Orac)
-print(S)
+print(R)
