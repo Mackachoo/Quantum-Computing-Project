@@ -16,8 +16,9 @@ def check_efficiency(f):
 
     for n in nq:
         #Run Grover's algorithm for the given parameters
+        print(f"Running Grover's, {int(np.pi/(4*np.arcsin(1/np.sqrt(2**n))))} times:")
         start_time = time.time()
-        R, t = f(n,s)
+        R, t = f(n,s,False)
         T.append(t)
         Dt.append( time.time() - start_time)
         wr.write("%f %10.10f\n" % (t, time.time() - start_time))

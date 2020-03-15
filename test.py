@@ -4,8 +4,8 @@ import grovers as gr
 import register as re
 
 ##___________________________________Demonstration______________________________##
-s = int(input("which state are you looking for?: "))
-nq = int(input("number of qubits: "))
+s = int(input("Which state are you looking for?: "))
+nq = int(input("Number of qubits: "))
 
 #Make gates
 H = gr.Hadamard(nq)
