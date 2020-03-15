@@ -4,36 +4,78 @@ import math as m
 import operations as op
 from random import random as rnd
 
-"""
--Class to represent the System (Register) at any point in time
--Receives a pure state as its input (can only be initialised as a pure state, as in real life)
--Main representation is the list self.signVector where all the coefficients for the modes are stored.
-e.g
-|s> = -0.2|0> + 0.9|1>, has
-self.signVector = [-0.2, 0.9], and
-self.qbitVector = [Register(0,1), Register(1,1)] (i.e. a list of pure "states" [|0>, |1>])
-
-"""
-
 
 class Register():
+    """ Class to represent the System (Register) at any point in time
+
+    Receives a pure state as its input (can only be initialised as a pure state, as in real life)
+    Main representation is the list self.signVector where all the coefficients for the modes are stored.
+
+    Parameters
+    ----------
+    input : type
+        Description of parameter `input`.
+
+    Attributes
+    ----------
+    qR : quantum_states.State
+        stores the quantum register dynamically created elsewhere.
+    signVector : numpy array
+        list of amplitudes and signs of each state.
+    qbitVector : numpy array
+        list of individual states.
+    Methods
+    -------
+    applyGate(gate)
+        operates matrix "gate" on the Register
+
+    e.g
+    |s> = -0.2|0> + 0.9|1>, has
+    self.signVector = [-0.2, 0.9], and
+    self.qbitVector = [Register(0,1), Register(1,1)] (i.e. a list of pure "states" [|0>, |1>])
+    """
 
     def __init__(self,input):
+        """
+        Parameters
+        ----------
+        input : quantum_states.State
+            quantum state dynamically created elsewhere (grovers in our case).
+        """
 
-        self.qR = input                                                                                 # Stores the input quantum register.
+        self.qR = input     # Stores the input quantum register.
 
-        self.signVector = self.qR.vec                                                                   # This creates the signVector by calling vectorRepresentation().
-        self.qbitVector = np.array([qs.State((i,self.qR.values[1])) for i in range(self.qR.d)])      # This creates a array of the form [|0>,|1>,|2>,...,|2^(dimension)>].
+        # This creates the signVector by calling vectorRepresentation().
+        self.signVector = self.qR.vec
+        # This creates a array of the form [|0>,|1>,|2>,...,|2^(dimension)>].
+        self.qbitVector = np.array([qs.State((i,self.qR.values[1])) for i in range(self.qR.d)])
 
 
     def applyGate(self, gate):
-        """ Operates the matrix "gate" on the Register, (simple matrix-vector multiplication)"""
+        """Operates the matrix "gate" on the register.
+
+        Used for Haddamard, Oracle, and Diffuser gates dynamically.
+        Works by simple matrix-vector multiplication.
+
+        Parameters
+        ----------
+        gate : numpy array
+            matrix to be applied to the register's vector representation.
+        """
+
         self.signVector = np.dot(gate, self.signVector)
 
     def measure(self):
+        """Colapses the System into one state depending on amplitudes of
+           each state
+
+        Returns
+        -------
+        f-string
+            the string representation of the state with the
+            selected amplitude.
         """
-        Randomly colapses the System into one state depending on amplitudes
-        """
+
         ## "Uncertainty" is simulated using a Monte-Carlo like approach.
         r = rnd() #random number, uniform probability from 0 to 1
         sum = 0
@@ -44,7 +86,14 @@ class Register():
                 return (f"{self.qbitVector[i]}")
 
     def __str__(self):
-        """TODO: allows hadamard class to be printed nicely.
+        """String representation of full register
+
+        Returns
+        -------
+        str
+            representation of register as superposition of states.
+
+        TODO: allow hadamard class to be printed nicely.
         Representation :
             H = (1/√2ⁿ)*Σ registers[i]
               = fⁿ(signVector ᛫ qbitVector)
@@ -62,7 +111,6 @@ class Register():
             else:
                 output += f" {round(self.signVector[i],5)}{self.qbitVector[i]}"
         return output
-
 
 # Testing # --------------------------------------------------------------------
 
