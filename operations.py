@@ -1,6 +1,7 @@
 import numpy as np
 import quantum_states as qs
 import math as m
+from time import time
 import sparse as sp
 
 gates = {
@@ -301,14 +302,19 @@ def constructGate(code):
 
 
 """
-a = 3*np.identity(4)
-b = np.array([[1,0,0,1],[5,6,0,0],[0,0,0,0],[0,0,5,0]])
-#print(a)
+a = np.random.rand(50,50)
+b = np.random.rand(50,50)
 #print(b)
 sa = sp.sparse(a)
 sb = sp.sparse(b)
-print(f"{sa}\n\n  X\n\n{sb}\n\n  =\n\n")
-print(f"Correct:\n{kroneckerProduct(a,b)}\n\nTest:\n{kroneckerProduct(sa,sb)}")
+t0 = time()
+asdf = kroneckerProduct(a,b)
+t1 = time()
+asfd = kroneckerProduct(sa,sb)
+t2 = time()
+
+print(f"Original in {t1-t0} secs:\nNew in {t2-t1} secs:\n")
+print(f"{t0} -> {t1} -> {t2}")
 """
 
 
