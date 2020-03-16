@@ -302,15 +302,15 @@ def constructGate(code):
 
 
 """
-a = np.random.rand(1024,1024)
-b = np.random.rand(2,2)
+a = np.identity(50)
+b = np.random.rand(50,50)
 #print(b)
 sa = sp.sparse(a)
 sb = sp.sparse(b)
 t0 = time()
-asdf = kroneckerProduct(a,b)
+asdf = matrixProduct(a,b)
 t1 = time()
-asfd = kroneckerProduct(sa,sb)
+asfd = matrixProduct(sa,sb)
 t2 = time()
 
 print(f"Original in {t1-t0} secs:\nNew in {t2-t1} secs:\n")
