@@ -63,7 +63,7 @@ class QubitState(ABC):
 
 
 
-class Register(QubitState):
+class State(QubitState):
     """A multi-qubit ket in the computational (z) basis.
 
     We use the normal binary convention that the least significant qubit is on the
@@ -90,7 +90,7 @@ class Register(QubitState):
         super().__init__(values, ket)
         self.values = values
         self.d = 2**values[1]    #number of qubits
-        self.int = values[0]     #Integer representation of register
+        self.int = values[0]     #Integer representation of State
 
         if self.int>self.d-1:
             raise InputError("State can't be represented with given number of qubits")
@@ -118,17 +118,6 @@ class Register(QubitState):
     def __str__(self):
         """TODO: ensure representation is appropiate"""
         return super().__str__()
-
-
-class State():
-    """ General superposition of registers """
-    def __init__(self, vector):
-        s = len(vector)
-        self.st = np.array([(Register((i, s)), vector[i]) for i in range (s)])
-        self.vec = vector
-
-    def normalise(self):
-        """ Implement normalisation"""
 
 
 #-----------------------
