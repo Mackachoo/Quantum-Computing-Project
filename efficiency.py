@@ -5,6 +5,19 @@ import matplotlib.pyplot as plt
 
 #Run for different sizes of registers and see how time scales for each algorithm f
 def check_efficiency(f):
+    """Short summary.
+
+    Parameters
+    ----------
+    f : type
+        Description of parameter `f`.
+
+    Returns
+    -------
+    type
+        Description of returned object.
+
+    """
     s = 1
     Dt = []
     T = []
