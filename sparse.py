@@ -1,8 +1,6 @@
 import numpy as np
-<<<<<<< HEAD
 import scipy.sparse as sp
-=======
->>>>>>> ada986c43f0c493a544b1ce70793b21f55db7bc3
+
 
 class sparse():
     """

@@ -73,7 +73,7 @@ def matrixProduct(matA,matB):
     -------
     numpy array or sp.sparse
         Matrix being a product of (matA x matB).
-    """    
+    """
 
     if isinstance(matA, np.ndarray) & isinstance(matB, np.ndarray):
         if matA.shape[1] != matB.shape[0]:
@@ -93,8 +93,8 @@ def matrixProduct(matA,matB):
                     if (b[0],a[1]) in matZ:
                         matZ[(b[0],a[1])] += matA.matrixDict[a]*matB.matrixDict[b]
                     else:
-                        matZ[(b[0],a[1])] = matA.matrixDict[a]*matB.matrixDict[b]   
-        return sp.sparse(matZ)            
+                        matZ[(b[0],a[1])] = matA.matrixDict[a]*matB.matrixDict[b]
+        return sp.sparse(matZ)
     else:
         print("ERROR : Incorrect type for one or more matrices.")
 
@@ -122,7 +122,7 @@ def matrixDet(mat):
         return determinant(mat.asMatrix)
     else:
         print("ERROR : Incorrect type for matrix.")
-            
+
 def determinant(mat):
     if mat.shape[0] != mat.shape[1]:
         print("Non NxN matrices")
@@ -302,8 +302,8 @@ def constructGate(code):
 
 
 """
-a = np.random.rand(50,50)
-b = np.random.rand(50,50)
+a = np.random.rand(1024,1024)
+b = np.random.rand(2,2)
 #print(b)
 sa = sp.sparse(a)
 sb = sp.sparse(b)
@@ -316,5 +316,3 @@ t2 = time()
 print(f"Original in {t1-t0} secs:\nNew in {t2-t1} secs:\n")
 print(f"{t0} -> {t1} -> {t2}")
 """
-
-

@@ -61,6 +61,7 @@ def Hadamard(nq):
     H = op.constructGate('H'*nq)
     return H
 
+
 def Diffuser(nq):
     """ Returns the Grover's Diffusion operator for # of qubits nq
 
@@ -80,12 +81,8 @@ def Diffuser(nq):
     Z = op.constructGate(f"{nq}Z")  #Constructs the nq-dimansional CNOT gate (middle layer)
     return np.dot(np.dot(L, Z), L)
 
-<<<<<<< HEAD
+
 def Grovers(nq, s, cout):
-    if cout:
-=======
-#<<<<<<< HEAD
-def Grovers(nq, s):
     """ Actual function running grover's algorithm.
 
     Capable of adapting gates dynamically depending on the mode and number of
@@ -108,9 +105,7 @@ def Grovers(nq, s):
         Dt is the time interval that it took to run Grovers 'it' times on
         register.
     """
-
-    if print:
->>>>>>> ada986c43f0c493a544b1ce70793b21f55db7bc3
+    if cout:
         print('\n'+"-------Making gates------:")
         print("Making Hadamard")
     H = Hadamard(nq)
@@ -164,17 +159,7 @@ def FrequencyPlot(freq, States):
         plt.annotate(freq[i], xy=(i, freq[i]), ha='center', va='bottom')
     plt.show()
 
-<<<<<<< HEAD
-"""
-Observe the system R, n times. This simulates the "Uncertainty" in the outcome of the observation.
-Parameters: Register (R), number of times you want to "run" Grover's (n), number of qubits(nq).
 
-As the state of the system before observing it, is definite, we don't need to run Grover's each time.
-Just simulate the final measurement using the register.measure() method, that implements a Monte-Carlo approach
-for counting how many times each state was observed in a given number of trials.
-"""
-=======
->>>>>>> ada986c43f0c493a544b1ce70793b21f55db7bc3
 def Observe_System(R, n, nq):
     """ Observe the register R, n times.
 
