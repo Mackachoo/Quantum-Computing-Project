@@ -80,6 +80,7 @@ def Diffuser(nq):
     Z = op.constructGate(f"{nq}Z")  #Constructs the nq-dimansional CNOT gate (middle layer)
     return np.dot(np.dot(L, Z), L)
 
+<<<<<<< HEAD
 def Grovers(nq, s):
     """ Actual function running grover's algorithm.
 
@@ -103,24 +104,29 @@ def Grovers(nq, s):
         Dt is the time interval that it took to run Grovers 'it' times on
         register.
     """
-
-    print('\n'+"-------Making gates------:")
-    print("Making Hadamard")
+    
+    if print:
+        print('\n'+"-------Making gates------:")
+        print("Making Hadamard")
     H = Hadamard(nq)
-    print("Making Oracle")
+    if print:
+        print("Making Oracle")
     Orac = Oracle(nq, s)
-    print("Making Diffusion Operator" + '\n')
+    if print:
+        print("Making Diffusion Operator" + '\n')
     Diff = Diffuser(nq)
 
     #Initialising Register in a uniform superposition
-    print("-------Initialising Register-------" + '\n')
+    if print:
+        print("-------Initialising Register-------" + '\n')
     R = re.Register(qs.State((0,nq)))
     start_time = time.time()
     R.applyGate(H)
 
     #Iterating it times
     it = int(np.pi/(4*np.arcsin(1/np.sqrt(2**nq))))
-    print('\n'+ f"Running Grover's, {it} times:")
+    if print:
+        print('\n'+ f"Running Grover's, {it} times:")
     for i in range(it):
         R.applyGate(Orac)
         R.applyGate(H)
