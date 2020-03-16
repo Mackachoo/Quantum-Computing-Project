@@ -1,6 +1,7 @@
 import numpy as np
 import quantum_states as qs
 import math as m
+import sparse as sp
 
 gates = {
 
@@ -16,36 +17,69 @@ gates = {
 
 }
 
+
+
 ### Matrix Addition!   -------------------------------------------------------------------------------------------------
 
 def matrixSum(matA,matB):
-    if matA.shape != matB.shape:
-        print("Non NxN matching matrices")
+    if isinstance(matA, np.ndarray) & isinstance(matA, np.ndarray):
+        if matA.shape != matB.shape:
+            print("Non NxN matching matrices")
+        else:
+            matZ = np.zeros((matA.shape[0],matA.shape[1]))
+            for i in range(matA.shape[0]):
+                for j in range(matA.shape[1]):
+                    matZ[i][j] = matA[i][j]+matB[i][j]
+            return matZ
+    elif isinstance(matA, sp.sparse) & isinstance(matA, sp.sparse):
+        for b in matB.matrixDict:
+            if b in matA.matrixDict:
+                matA.matrixDict[b] += matB.matrixDict[b]
+            else:
+                matA.matrixDict[b] = matB.matrixDict[b]
+        return matA
     else:
-        matZ = np.zeros((matA.shape[0],matA.shape[1]))
-        for i in range(matA.shape[0]):
-            for j in range(matA.shape[1]):
-                matZ[i][j] = matA[i][j]+matB[i][j]
-        return matZ
-
+        print("ERROR : Incorrect type for one or more matrices.")
 
 ### Matrix multiplication!   -------------------------------------------------------------------------------------------
 
 def matrixProduct(matA,matB):
-    if matA.shape[1] != matB.shape[0]:
-        print(f"Non axN Nxb matching matrices : {matA.shape[0]}x{matA.shape[1]} and {matB.shape[0]}x{matB.shape[1]}")
+    if isinstance(matA, np.ndarray) & isinstance(matB, np.ndarray):
+        if matA.shape[1] != matB.shape[0]:
+            print(f"Non axN Nxb matching matrices : {matA.shape[0]}x{matA.shape[1]} and {matB.shape[0]}x{matB.shape[1]}")
+        else:
+            matZ = np.zeros((matA.shape[0],matB.shape[1]))
+            for i in range(matZ.shape[0]):
+                for j in range(matZ.shape[1]):
+                    for n in range(matA.shape[1]):
+                        matZ[i][j] += matA[i][n]*matB[n][j]
+            return matZ
+    elif isinstance(matA, sp.sparse) & isinstance(matB, sp.sparse):
+        matZ = {}
+        for a in matA.matrixDict:
+            for b in matB.matrixDict:
+                if a[0] == b[1]:
+                    if (b[0],a[1]) in matZ:
+                        matZ[(b[0],a[1])] += matA.matrixDict[a]*matB.matrixDict[b]
+                    else:
+                        matZ[(b[0],a[1])] = matA.matrixDict[a]*matB.matrixDict[b]   
+        return sp.sparse(matZ)            
     else:
-        matZ = np.zeros((matA.shape[0],matB.shape[1]))
-        for i in range(matZ.shape[0]):
-            for j in range(matZ.shape[1]):
-                for n in range(matA.shape[1]):
-                    matZ[i][j] += matA[i][n]*matB[n][j]
-        return matZ
+        print("ERROR : Incorrect type for one or more matrices.")
 
 
 ### Determinant of Matrix!   -------------------------------------------------------------------------------------------
 
 def matrixDet(mat):
+    if isinstance(mat, np.ndarray):
+        return determinant(mat)
+    elif isinstance(mat, sp.sparse):
+        #cons = np.array([ (-1)**((x+1)//2) for x in range(m.factorial(mat.size))])
+        return determinant(mat.matrixDict)
+    else:
+        print("ERROR : Incorrect type for matrix.")
+            
+def determinant(mat):
     if mat.shape[0] != mat.shape[1]:
         print("Non NxN matrices")
     else:
@@ -65,9 +99,20 @@ def matrixDet(mat):
 
 ### Matrix Inversion!   ------------------------------------------------------------------------------------------------
 
+
 def matrixInv(mat):
+    if isinstance(mat, np.ndarray):
+        return inverter(mat)
+    elif isinstance(mat, sp.sparse):
+        #cons = np.array([ (-1)**((x+1)//2) for x in range(m.factorial(mat.size))])
+        return sp.sparse(inverter(mat.matrixDict))
+    else:
+        print("ERROR : Incorrect type for matrix.")
+
+
+def inverter(mat):
     if mat.shape[0] != mat.shape[1]:
-        print("Non NxN matrices")
+        print("ERROR : Non NxN matrices")
     else:
         det = matrixDet(mat)
         matZ = np.zeros(mat.shape)
@@ -127,3 +172,17 @@ def constructGate(code):
         else:
             matrix = kroneckerProduct(matrix,gates[char])
     return matrix
+
+"""
+
+a = 3*np.identity(4)
+b = np.array([[1,0,0,1],[5,6,0,0],[0,0,0,0],[0,0,5,0]])
+#print(a)
+#print(b)
+sa = sp.sparse(a)
+sb = sp.sparse(b)
+print(f"{sa}\n\n  X\n\n{sb}\n\n  =\n\n")
+print(f"Correct:\n{matrixProduct(a,b)}\n\nTest:\n{matrixProduct(sa,sb)}")
+
+"""
+

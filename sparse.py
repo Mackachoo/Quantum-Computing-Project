@@ -1,7 +1,6 @@
 import numpy as np
-from scipy.sparse import csr_matrix
 
-class Csr_sparse():
+class sparse():
     """
 Class for sparse matrices
 TODO: Implement matrix product, matrix acting on vector and kronecker product for sparse matrices
@@ -9,32 +8,34 @@ Assume all matrices considered are square
     """
 
     def __init__(self, m): #m = matrix
-        self.val = []
-        self.row_pntr = []
-        self.col = []
-        self.dims = len(m)
+        if isinstance(m, np.ndarray):
+            self.matrixDict = {}
+            for x in range(len(m)):
+                for y in range(len(m[0])):
+                    if m[x][y] != 0:
+                        self.matrixDict[(x,y)] = m[x][y]
+            self.len = len(self.matrixDict)
+            self.size = len(m)
+        if isinstance(m, dict):
+            self.matrixDict = m
+            self.len = len(self.matrixDict)
+            self.size = 0
+            for pos in m:
+                #print(self.size)
+                #print(pos)
+                if pos[0] > self.size:
+                    self.size = pos[0]
+                if pos[1] > self.size:
+                    self.size = pos[1]
+            self.size += 1
 
-        for i in range(len(m)):
-            self.row_pntr.append(len(self.val))
-            for j in range(len(m[i])):
-                if m[i][j] != 0:
-                    self.val.append(m[i][j])
-                    self.col.append(j)
-        self.row_pntr.append(len(self.val))
 
-    def mult_vec(self, v): #multiply self with v, a vector
-        P = [0]*self.dims
-        for i in range(self.dims):
-            for k in range(self.row_pntr[i], self.row_pntr[i+1]):
-                P[i] += self.val[k]*v[self.col[k]]
-        return P
-
-    def mult_mat(self, m): #multiply self with m, another Csr_sparse matrix
+    def asMatrix(self):
+        output = np.zeros((self.size,self.size))
+        for pos in self.matrixDict:
+            output[pos[0]][pos[1]] = self.matrixDict[pos] 
+        return output
         
 
-m = 3*np.identity(5)
-print(m)
-s = Csr_sparse(m)
-v = [1,0,0,0,0]
-p = s.mult_vec(v)
-print(p)
+    def __str__(self):
+        return str(self.asMatrix())
