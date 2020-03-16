@@ -26,14 +26,14 @@ def matrixSum(matA,matB):
 
     Parameters
     ----------
-    matA : numpy array
+    matA : numpy array or sp.sparse
         First matrix in sum.
-    matB : numpy array
+    matB : numpy array or sp.sparse
         Second matrix in sum.
 
     Returns
     -------
-    numpy array
+    numpy array or sp.sparse
         Sum of matA + matB.
     """
 
@@ -63,14 +63,14 @@ def matrixProduct(matA,matB):
 
     Parameters
     ----------
-    matA : numpy array
+    matA : numpy array or sp.sparse
         Leftmost matrix in product.
-    matB : numpy array
+    matB : numpy array or sp.sparse
         Rightmost matrix in product.
 
     Returns
     -------
-    numpy array
+    numpy array or sp.sparse
         Matrix being a product of (matA x matB).
     """    
 
@@ -105,7 +105,7 @@ def matrixDet(mat):
 
     Parameters
     ----------
-    mat : numpy array
+    mat : numpy array or sp.sparse
         Square matrix whose dterminant will be found.
 
     Returns
@@ -118,7 +118,7 @@ def matrixDet(mat):
         return determinant(mat)
     elif isinstance(mat, sp.sparse):
         #cons = np.array([ (-1)**((x+1)//2) for x in range(m.factorial(mat.size))])
-        return determinant(mat.matrixDict)
+        return determinant(mat.asMatrix)
     else:
         print("ERROR : Incorrect type for matrix.")
             
@@ -149,19 +149,19 @@ def matrixInv(mat):
 
     Parameters
     ----------
-    mat : numpy array
+    mat : numpy array or sp.sparse
         Matrix whose inverse will be found.
 
     Returns
     -------
-    numpy array
+    numpy array or sp.sparse
         Inverted matrix whose operation reverses that of mat.
     """
     if isinstance(mat, np.ndarray):
-        return inverter(mat)
+        return inverter(mat[0])
     elif isinstance(mat, sp.sparse):
         #cons = np.array([ (-1)**((x+1)//2) for x in range(m.factorial(mat.size))])
-        return sp.sparse(inverter(mat.matrixDict))
+        return sp.sparse(inverter(mat.asMatrix))
     else:
         print("ERROR : Incorrect type for matrix.")
 
@@ -177,7 +177,8 @@ def inverter(mat):
                 matN = np.delete(mat, i, 1)
                 matN = np.delete(matN, j, 0)
                 matZ[i][j] = (1/det)*(1-2*((i+j)%2))*matrixDet(matN)
-        return matZ
+        size = mat.shape[0]
+        return matZ, size
 
 
 ### Tensor Product   ---------------------------------------------------------------------------------------------------
@@ -214,22 +215,28 @@ def kroneckerProduct(matA,matB):
 
     Parameters
     ----------
-    matA : numpy array
+    matA : numpy array or sp.sparse
         Leftmost matrix in kronecker product.
-    matB : numpy array
+    matB : numpy array or sp.sparse
         Rightmost array in product.
 
     Returns
     -------
-    numpy array
+    numpy array or sp.sparse
         Kronecker product of matA (x) matB.
     """
-
-    matZ = np.zeros((matA.shape[0]*matB.shape[0], matA.shape[1]*matB.shape[1]))
-    for i in range(matZ.shape[0]):
-        for j in range(matZ.shape[1]):
-            matZ[i][j] = matA[i//matB.shape[0]][j//matB.shape[1]]*matB[i%matB.shape[0]][j%matB.shape[1]]
-    return matZ
+    if isinstance(matA, np.ndarray) & isinstance(matB, np.ndarray):    
+        matZ = np.zeros((matA.shape[0]*matB.shape[0], matA.shape[1]*matB.shape[1]))
+        for i in range(matZ.shape[0]):
+            for j in range(matZ.shape[1]):
+                matZ[i][j] = matA[i//matB.shape[0]][j//matB.shape[1]]*matB[i%matB.shape[0]][j%matB.shape[1]]
+        return matZ
+    elif isinstance(matA, sp.sparse) & isinstance(matB, sp.sparse):
+        matZ = {}
+        for a in matA.matrixDict:
+            for b in matB.matrixDict:
+                matZ[( b[0]+a[0]*matB.size , b[1]+a[1]*matB.size )] = matA.matrixDict[a]*matB.matrixDict[b]
+        return sp.sparse(matZ, matA.size*matB.size)
 
 
 ### Helper Functions ----------------------------------------------------------------------------------------------------
@@ -297,7 +304,7 @@ b = np.array([[1,0,0,1],[5,6,0,0],[0,0,0,0],[0,0,5,0]])
 sa = sp.sparse(a)
 sb = sp.sparse(b)
 print(f"{sa}\n\n  X\n\n{sb}\n\n  =\n\n")
-print(f"Correct:\n{matrixProduct(a,b)}\n\nTest:\n{matrixProduct(sa,sb)}")
+print(f"Correct:\n{kroneckerProduct(a,b)}\n\nTest:\n{kroneckerProduct(sa,sb)}")
 
 
 

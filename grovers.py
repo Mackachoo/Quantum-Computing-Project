@@ -80,7 +80,7 @@ def Diffuser(nq):
     Z = op.constructGate(f"{nq}Z")  #Constructs the nq-dimansional CNOT gate (middle layer)
     return np.dot(np.dot(L, Z), L)
 
-<<<<<<< HEAD
+#<<<<<<< HEAD
 def Grovers(nq, s):
     """ Actual function running grover's algorithm.
 

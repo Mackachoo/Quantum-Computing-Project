@@ -7,7 +7,7 @@ TODO: Implement matrix product, matrix acting on vector and kronecker product fo
 Assume all matrices considered are square
     """
 
-    def __init__(self, m): #m = matrix
+    def __init__(self, m, s = None): # Takes m which is a square matrix or dictionary and an optional parameter s for the size of matrix.
         if isinstance(m, np.ndarray):
             self.matrixDict = {}
             for x in range(len(m)):
@@ -19,16 +19,19 @@ Assume all matrices considered are square
         if isinstance(m, dict):
             self.matrixDict = m
             self.len = len(self.matrixDict)
-            self.size = 0
-            for pos in m:
-                #print(self.size)
-                #print(pos)
-                if pos[0] > self.size:
-                    self.size = pos[0]
-                if pos[1] > self.size:
-                    self.size = pos[1]
-            self.size += 1
-
+            if s != None:
+                self.size = s
+            else:                    # Guesses the matrix size if none given.
+                self.size = 0
+                for pos in m:
+                    #print(self.size)
+                    #print(pos)
+                    if pos[0] > self.size:
+                        self.size = pos[0]
+                    if pos[1] > self.size:
+                        self.size = pos[1]
+                self.size += 1
+                
 
     def asMatrix(self):
         output = np.zeros((self.size,self.size))
