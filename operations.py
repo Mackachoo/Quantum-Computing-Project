@@ -225,7 +225,7 @@ def kroneckerProduct(matA,matB):
     numpy array or sp.sparse
         Kronecker product of matA (x) matB.
     """
-    if isinstance(matA, np.ndarray) & isinstance(matB, np.ndarray):    
+    if isinstance(matA, np.ndarray) & isinstance(matB, np.ndarray):
         matZ = np.zeros((matA.shape[0]*matB.shape[0], matA.shape[1]*matB.shape[1]))
         for i in range(matZ.shape[0]):
             for j in range(matZ.shape[1]):
@@ -245,19 +245,23 @@ def vecMatProduct(mat,vec):
 
     Parameters
     ----------
-    mat : numpy array
+    mat : numpy array or sp.sparse
         2D Matrix.
-    vec : numpy array
+    vec : numpy array or sp.sparse
         1D Vector.
 
     Returns
     -------
-    numpy array
+    numpy array or sp.sparse
         Formatted product.
     """
-
-    vecR = np.resize(vec,(len(vec),1))
-    return matrixProduct(mat,vecR)[:,0]
+    if isinstance(mat, np.ndarray) & isinstance(vec, np.ndarray):
+        vecR = np.resize(vec,(len(vec),1))
+        return matrixProduct(mat,vecR)[:,0]
+    elif isinstance(mat, sp.sparse) & isinstance(vec, sp.sparse):           # Not entirely sure if this works.
+        return matrixProduct(mat,vecR)
+    else:
+        print("ERROR : Incorrect type for matrix and/or vector.")
 
 
 def constructGate(code):
@@ -296,7 +300,7 @@ def constructGate(code):
     return matrix
 
 
-
+"""
 a = 3*np.identity(4)
 b = np.array([[1,0,0,1],[5,6,0,0],[0,0,0,0],[0,0,5,0]])
 #print(a)
@@ -305,6 +309,6 @@ sa = sp.sparse(a)
 sb = sp.sparse(b)
 print(f"{sa}\n\n  X\n\n{sb}\n\n  =\n\n")
 print(f"Correct:\n{kroneckerProduct(a,b)}\n\nTest:\n{kroneckerProduct(sa,sb)}")
-
+"""
 
 
