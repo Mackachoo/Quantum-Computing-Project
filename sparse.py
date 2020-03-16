@@ -1,38 +1,48 @@
 import numpy as np
+<<<<<<< HEAD
 import scipy.sparse as sp
+=======
+>>>>>>> ada986c43f0c493a544b1ce70793b21f55db7bc3
 
-class Csr_sparse():
+class sparse():
     """
 Class for sparse matrices
 TODO: Implement matrix product, matrix acting on vector and kronecker product for csr_sparse matrices
 Assume all matrices considered are square
     """
 
-    def __init__(self, m): #m = matrix
-        self.csr = sp.csr_matrix(m)
+    def __init__(self, m, s = None): # Takes m which is a square matrix or dictionary and an optional parameter s for the size of matrix.
+        if isinstance(m, np.ndarray):
+            self.matrixDict = {}
+            for x in range(len(m)):
+                for y in range(len(m[0])):
+                    if m[x][y] != 0:
+                        self.matrixDict[(x,y)] = m[x][y]
+            self.len = len(self.matrixDict)
+            self.size = len(m)
+        if isinstance(m, dict):
+            self.matrixDict = m
+            self.len = len(self.matrixDict)
+            if s != None:
+                self.size = s
+            else:                    # Guesses the matrix size if none given.
+                self.size = 0
+                for pos in m:
+                    #print(self.size)
+                    #print(pos)
+                    if pos[0] > self.size:
+                        self.size = pos[0]
+                    if pos[1] > self.size:
+                        self.size = pos[1]
+                self.size += 1
 
-    def mult_vec(self, v): #multiply self with v, a vector
-        return Csr_sparse(self.csr.dot(v))
 
-    def mult_mat(self, m): #multiply self with m, a Csr_matrix
-        return Csr_sparse(self.csr.dot(m.csr))
-
-    def kronecker(self, m): #returns the kronecker product with anoher Csr_sparse
-        val = self.csr.data
-        row_pntr = self.csr.indptr
-        col = self.csr.indices
-        d = self.csr.shape[0]
-        v = []
-        rp = []
-        c = []
-        for i in range(d):
-            for k in range(row_pntr[i], row_pntr[i+1]):
+    def asMatrix(self):
+        output = np.zeros((self.size,self.size))
+        for pos in self.matrixDict:
+            output[pos[0]][pos[1]] = self.matrixDict[pos]
+        return output
 
 
-
-
-m = 3*np.identity(5)
-
-s = Csr_sparse(m)
-p = s.mult_mat(s)
-s.kronecker(s)
+    def __str__(self):
+        return str(self.asMatrix())

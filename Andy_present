@@ -1,0 +1,402 @@
+For efficiency.py:
+  def check_efficiency(f):
+      """Short summary.
+
+      Parameters
+      ----------
+      f : type
+          Description of parameter `f`.
+
+      Returns
+      -------
+      type
+          Description of returned object.
+
+      """
+
+...................................................................................................
+
+For errors.py:
+  class Error(Exception):
+      """Base class for exceptions in this module.
+
+      Parameters
+      ----------
+      expression : str
+          Built-in error trace.
+
+      Attributes
+      ----------
+      expression : str
+          Built-in error trace
+      """
+  class InputError(Error):
+      """Exception raised for errors in the input.
+
+      Parameters
+      ----------
+      expression : str
+          Built-in error trace.
+
+      Attributes
+      ----------
+      expression : str
+          Built-in error trace
+      message : str
+          TODO: Custom explanation of the error
+      """
+
+...................................................................................................
+
+for grovers.py:
+  def Oracle(nq, s):
+      """ Function that dynamically creates the oracle gate
+
+      Using deterministic algorithm for mode s, with number of qubits nq,
+      function creates a matrix made up from lower-level gates which serves as
+      the oracle gate when applied to an entangled quantum register.
+
+      Parameters
+      ----------
+      nq : int
+          Number of qubits per state.
+      s : int
+          Denary representation of state the gate is applied to.
+
+      Returns
+      -------
+      numpy array
+          returns an nq-dimensional numpy array which can be applied as an Oracle
+          gate on a quantum register
+
+      """
+
+  def Hadamard(nq):
+      """ Constructs the Hadamard gate (that is to be applied to all qubits)
+
+      Parameters
+      ----------
+      nq : int
+          Number of qubits per state.
+
+      Returns
+      -------
+      numpy array
+          returns an nq-dimensional numpy array which can be applied as a Hadamard
+          gate on a quantum register
+      """
+
+  def Diffuser(nq):
+      """ Returns the Grover's Diffusion operator for # of qubits nq
+
+      Parameters
+      ----------
+      nq : int
+          Number of qubits per state.
+
+      Returns
+      -------
+      numpy array
+          returns an nq-dimensional numpy array which can be applied as a Diffuser
+          gate on a quantum register
+      """
+
+  def Grovers(nq, s):
+      """ Actual function running grover's algorithm.
+
+      Capable of adapting gates dynamically depending on the mode and number of
+      qubits selected by user.
+
+      Parameters
+      ----------
+      nq : type
+          Description of parameter `nq`.
+      s : type
+          Denary representation of state.
+
+      Returns
+      -------
+      register.Register, int
+          The custom register object starts as a uniform superposition of States
+          which is then put through Grover's algorithm 'it' times and the heavily
+          weighted (towards target state) register is returned at the end.
+
+          Dt is the time interval that it took to run Grovers 'it' times on
+          register.
+      """
+
+  def FrequencyPlot(freq, States):
+      """Plots a graph of each state and how many times it had been selected.
+
+      Times selected is analogous to probability of being the 'correct' target state.
+
+      Parameters
+      ----------
+      freq : list of int
+          Frequencies for which each state was selected.
+      States : list of strings
+          List containing each state in register in dirac notation.
+      """
+
+  def Observe_System(R, n, nq):
+      """ Observe the register R, n times.
+
+      This simulates the "Uncertainty" in the outcome of the observation.
+
+      As the state of the system before observing it, is definite, we don't need
+      to run Grover's each time. Just simulate the final measurement using
+      the register.measure() method, that implements a Monte-Carlo approach for
+      counting how many times each state was observed in a given number of trials.
+
+      Calls for plot of measurements at the end.
+
+
+      Parameters
+      ----------
+      R : register.Register
+          Custom register object.
+      n : int
+          Number of times to run Grover's for.
+      nq : int
+          Number of quibits used to represent each state.
+      """
+
+...................................................................................................
+
+For operations.py:
+  def matrixSum(matA,matB):
+      """ Function summing two matrices.
+
+      Parameters
+      ----------
+      matA : numpy array
+          First matrix in sum.
+      matB : numpy array
+          Second matrix in sum.
+
+      Returns
+      -------
+      numpy array
+          Sum of matA + matB.
+      """
+
+  def matrixProduct(matA,matB):
+      """Two matrix multiplication function.
+
+      Parameters
+      ----------
+      matA : numpy array
+          Leftmost matrix in product.
+      matB : numpy array
+          Rightmost matrix in product.
+
+      Returns
+      -------
+      numpy array
+          Matrix being a product of (matA x matB).
+      """
+
+  def matrixDet(mat):
+      """Calculates determinant of n-dimensional square matrix.
+
+      Parameters
+      ----------
+      mat : numpy array
+          Square matrix whose dterminant will be found.
+
+      Returns
+      -------
+      int
+          Determinant of inputted square matrix (mat).
+      """
+
+  def matrixInv(mat):
+      """Find the matrix inverse for square matrix mat.
+
+      Parameters
+      ----------
+      mat : numpy array
+          Matrix whose inverse will be found.
+
+      Returns
+      -------
+      numpy array
+          Inverted matrix whose operation reverses that of mat.
+      """
+
+  def tensorProduct(vecA,vecB):
+      """Function calculating tensor product of two vectors in vectorial form
+
+      Parameters
+      ----------
+      vecA : numpy array
+          Leftmost vector in tensor product.
+      vecB : numpy array
+          Rightmost vector in tensor product.
+
+      Returns
+      -------
+      numpy array
+          Vector representing tensor product of vecA (x) vecB
+      """
+
+  def kroneckerProduct(matA,matB):
+      """Function calculating the kronecker product between two matrices
+
+      I.e. higher-dimensional tensor product.
+
+      Parameters
+      ----------
+      matA : numpy array
+          Leftmost matrix in kronecker product.
+      matB : numpy array
+          Rightmost array in product.
+
+      Returns
+      -------
+      numpy array
+          Kronecker product of matA (x) matB.
+      """
+
+  def vecMatProduct(mat,vec):
+      """ TODO: takes a matrix and a single array vector and formats them for the matrixProduct() function.
+
+      Parameters
+      ----------
+      mat : numpy array
+          2D Matrix.
+      vec : numpy array
+          1D Vector.
+
+      Returns
+      -------
+      numpy array
+          Formatted product.
+      """
+
+  def constructGate(code):
+      """ Function constructing matrix representing gate dynamically
+
+      Works by parsing a carefully formatted string representing the gate
+      at each qubit and returns an array representing the operation
+
+      Parameters
+      ----------
+      code : str
+          Sequence/"code" used to generate specific gate matrix.
+
+      Returns
+      -------
+      numpy array
+          Matrix which when acted on a particular register will have the same
+          effect as applying the theoretical quantum gate.
+      """
+
+...................................................................................................
+
+for quantum_states.py:
+  class QubitState(ABC):
+      """ Base class for State serving as an interface.
+      Methods are all abstract and overriden in child classes
+
+      Parameters
+      ----------
+      values : tuple
+          Contains the (state, no. qubits used to represent it).
+      ket : Bool=True
+          sets wether to treat state in bra or ket representation,
+          used to set vector and string representations
+
+      Attributes
+      ----------
+      vals : tuple
+          tuple of (state, no. of qubits) .
+      strRep : str
+          string representation of superposition of states.
+      ket: Bool
+          property dictating vector and string representation
+
+      Methods
+      -------
+      flip(self)
+          flip ket to a bra and viceversa
+      dotWith(self, ket)
+          dot operation between state's vector representation and another object
+      __str__(self)
+          represent state in string representation
+      """
+
+  class State(QubitState):
+      """Class representing a multi-qubit ket(state) in the computational (z) basis.
+
+      -Note: We use the normal binary convention that the least significant
+       qubit is on the right, so |00001> has a 1 in the least significant qubit.
+
+      Parameters
+      ----------
+      values : tuple
+          Contains the (state, no. qubits used to represent it).
+      ket : Bool=True
+          sets wether to treat state in bra or ket representation,
+          used to set vector and string representations
+
+      Attributes
+      ----------
+      values : tuple
+          tuple of (state, no. of qubits)
+              First element is the representation of the state in denary,
+              second element is the dimensionality of our state space.
+              e.g: (1, 4) = [0,0,0,1]
+      strRep : str
+          string representation of superposition of states.
+      ket: Bool
+          property dictating vector and string representation
+      d : int
+          dimensionality of state, i.e. qubits used to represent it.
+      den : int
+          denary representation of state, i.e. |011> has den = 3.
+      vec : numpy array
+          list of qubits representing state as vector.
+      bin : str
+          binary representation of state as 0b___ e.g. |3> has bin = "0b11"
+      strRep : str
+          string representaiton of the state in dirac notation: |state>.
+      """
+
+...................................................................................................
+
+for register.py:
+  class Register():
+      """ Class to represent the System (Register) at any point in time
+
+      Receives a pure state as its input (can only be initialised as a pure state, as in real life)
+      Main representation is the list self.signVector where all the coefficients for the modes are stored.
+
+      Parameters
+      ----------
+      input : type
+          Description of parameter `input`.
+
+      Attributes
+      ----------
+      qR : quantum_states.State
+          stores the quantum register dynamically created elsewhere.
+      signVector : numpy array
+          list of amplitudes and signs of each state.
+      qbitVector : numpy array
+          list of individual states.
+      Methods
+      -------
+      applyGate(self, gate)
+          operates matrix "gate" on the Register
+      measure(self)
+          collapses register into most probable state
+      __str__(self)
+          string representation of state: |s> = -0.2|0> + 0.9|1>
+
+      Examples
+      --------
+      |s> = -0.2|0> + 0.9|1>, has
+      self.signVector = [-0.2, 0.9], and
+      self.qbitVector = [Register(0,1), Register(1,1)] (i.e. a list of pure "states" [|0>, |1>])
+      """
