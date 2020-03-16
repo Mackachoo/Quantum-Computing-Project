@@ -144,7 +144,8 @@ def determinant(mat):
 
 
 def matrixInv(mat):
-     """Find the matrix inverse for square matrix mat.
+    """
+     Find the matrix inverse for square matrix mat.
 
     Parameters
     ----------
@@ -156,8 +157,7 @@ def matrixInv(mat):
     numpy array
         Inverted matrix whose operation reverses that of mat.
     """
-
-   if isinstance(mat, np.ndarray):
+    if isinstance(mat, np.ndarray):
         return inverter(mat)
     elif isinstance(mat, sp.sparse):
         #cons = np.array([ (-1)**((x+1)//2) for x in range(m.factorial(mat.size))])
@@ -288,7 +288,7 @@ def constructGate(code):
             matrix = kroneckerProduct(matrix,gates[char])
     return matrix
 
-"""
+
 
 a = 3*np.identity(4)
 b = np.array([[1,0,0,1],[5,6,0,0],[0,0,0,0],[0,0,5,0]])
@@ -299,5 +299,5 @@ sb = sp.sparse(b)
 print(f"{sa}\n\n  X\n\n{sb}\n\n  =\n\n")
 print(f"Correct:\n{matrixProduct(a,b)}\n\nTest:\n{matrixProduct(sa,sb)}")
 
-"""
+
 
