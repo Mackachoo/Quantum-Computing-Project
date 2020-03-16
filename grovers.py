@@ -35,28 +35,28 @@ def Diffuser(nq):
     Z = op.constructGate(f"{nq}Z")  #Constructs the nq-dimansional CNOT gate (middle layer)
     return np.dot(np.dot(L, Z), L)
 
-def Grovers(nq, s, print):
-    if print:
+def Grovers(nq, s, cout):
+    if cout:
         print('\n'+"-------Making gates------:")
         print("Making Hadamard")
     H = Hadamard(nq)
-    if print:
+    if cout:
         print("Making Oracle")
     Orac = Oracle(nq, s)
-    if print:
+    if cout:
         print("Making Diffusion Operator" + '\n')
     Diff = Diffuser(nq)
 
     #Initialising Register in a uniform superposition
-    if print:
+    if cout:
         print("-------Initialising Register-------" + '\n')
     R = re.Register(qs.State((0,nq)))
     start_time = time.time()
     R.applyGate(H)
 
-    #Iterating it times
+    #Iterating -it times
     it = int(np.pi/(4*np.arcsin(1/np.sqrt(2**nq))))
-    if print:
+    if cout:
         print('\n'+ f"Running Grover's, {it} times:")
     for i in range(it):
         R.applyGate(Orac)
@@ -79,7 +79,7 @@ def FrequencyPlot(freq, States):
     plt.show()
 
 """
-Observe the system S, n times. This simulates the "Uncertainty" in the outcome of the observation.
+Observe the system R, n times. This simulates the "Uncertainty" in the outcome of the observation.
 Parameters: Register (R), number of times you want to "run" Grover's (n), number of qubits(nq).
 
 As the state of the system before observing it, is definite, we don't need to run Grover's each time.

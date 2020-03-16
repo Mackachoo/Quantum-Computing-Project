@@ -1,40 +1,38 @@
 import numpy as np
-from scipy.sparse import csr_matrix
+import scipy.sparse as sp
 
 class Csr_sparse():
     """
 Class for sparse matrices
-TODO: Implement matrix product, matrix acting on vector and kronecker product for sparse matrices
+TODO: Implement matrix product, matrix acting on vector and kronecker product for csr_sparse matrices
 Assume all matrices considered are square
     """
 
     def __init__(self, m): #m = matrix
-        self.val = []
-        self.row_pntr = []
-        self.col = []
-        self.dims = len(m)
-
-        for i in range(len(m)):
-            self.row_pntr.append(len(self.val))
-            for j in range(len(m[i])):
-                if m[i][j] != 0:
-                    self.val.append(m[i][j])
-                    self.col.append(j)
-        self.row_pntr.append(len(self.val))
+        self.csr = sp.csr_matrix(m)
 
     def mult_vec(self, v): #multiply self with v, a vector
-        P = [0]*self.dims
-        for i in range(self.dims):
-            for k in range(self.row_pntr[i], self.row_pntr[i+1]):
-                P[i] += self.val[k]*v[self.col[k]]
-        return P
+        return Csr_sparse(self.csr.dot(v))
 
-    def mult_mat(self, m): #multiply self with m, another Csr_sparse matrix
-        
+    def mult_mat(self, m): #multiply self with m, a Csr_matrix
+        return Csr_sparse(self.csr.dot(m.csr))
+
+    def kronecker(self, m): #returns the kronecker product with anoher Csr_sparse
+        val = self.csr.data
+        row_pntr = self.csr.indptr
+        col = self.csr.indices
+        d = self.csr.shape[0]
+        v = []
+        rp = []
+        c = []
+        for i in range(d):
+            for k in range(row_pntr[i], row_pntr[i+1]):
+
+
+
 
 m = 3*np.identity(5)
-print(m)
+
 s = Csr_sparse(m)
-v = [1,0,0,0,0]
-p = s.mult_vec(v)
-print(p)
+p = s.mult_mat(s)
+s.kronecker(s)
