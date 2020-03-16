@@ -22,6 +22,21 @@ gates = {
 ### Matrix Addition!   -------------------------------------------------------------------------------------------------
 
 def matrixSum(matA,matB):
+    """ Function summing two matrices.
+
+    Parameters
+    ----------
+    matA : numpy array
+        First matrix in sum.
+    matB : numpy array
+        Second matrix in sum.
+
+    Returns
+    -------
+    numpy array
+        Sum of matA + matB.
+    """
+
     if isinstance(matA, np.ndarray) & isinstance(matA, np.ndarray):
         if matA.shape != matB.shape:
             print("Non NxN matching matrices")
@@ -44,6 +59,21 @@ def matrixSum(matA,matB):
 ### Matrix multiplication!   -------------------------------------------------------------------------------------------
 
 def matrixProduct(matA,matB):
+    """Two matrix multiplication function.
+
+    Parameters
+    ----------
+    matA : numpy array
+        Leftmost matrix in product.
+    matB : numpy array
+        Rightmost matrix in product.
+
+    Returns
+    -------
+    numpy array
+        Matrix being a product of (matA x matB).
+    """    
+
     if isinstance(matA, np.ndarray) & isinstance(matB, np.ndarray):
         if matA.shape[1] != matB.shape[0]:
             print(f"Non axN Nxb matching matrices : {matA.shape[0]}x{matA.shape[1]} and {matB.shape[0]}x{matB.shape[1]}")
@@ -71,6 +101,19 @@ def matrixProduct(matA,matB):
 ### Determinant of Matrix!   -------------------------------------------------------------------------------------------
 
 def matrixDet(mat):
+    """Calculates determinant of n-dimensional square matrix.
+
+    Parameters
+    ----------
+    mat : numpy array
+        Square matrix whose dterminant will be found.
+
+    Returns
+    -------
+    int
+        Determinant of inputted square matrix (mat).
+    """
+
     if isinstance(mat, np.ndarray):
         return determinant(mat)
     elif isinstance(mat, sp.sparse):
@@ -101,7 +144,20 @@ def determinant(mat):
 
 
 def matrixInv(mat):
-    if isinstance(mat, np.ndarray):
+     """Find the matrix inverse for square matrix mat.
+
+    Parameters
+    ----------
+    mat : numpy array
+        Matrix whose inverse will be found.
+
+    Returns
+    -------
+    numpy array
+        Inverted matrix whose operation reverses that of mat.
+    """
+
+   if isinstance(mat, np.ndarray):
         return inverter(mat)
     elif isinstance(mat, sp.sparse):
         #cons = np.array([ (-1)**((x+1)//2) for x in range(m.factorial(mat.size))])
@@ -127,6 +183,21 @@ def inverter(mat):
 ### Tensor Product   ---------------------------------------------------------------------------------------------------
 #Input lists (e.g. if in 4d space, |2> = [0,0,1,0])
 def tensorProduct(vecA,vecB):
+    """Function calculating tensor product of two vectors in vectorial form
+
+    Parameters
+    ----------
+    vecA : numpy array
+        Leftmost vector in tensor product.
+    vecB : numpy array
+        Rightmost vector in tensor product.
+
+    Returns
+    -------
+    numpy array
+        Vector representing tensor product of vecA (x) vecB
+    """
+
     lA = len(vecA)
     lB = len(vecB)
     T = np.zeros(lA*lB)
@@ -137,25 +208,69 @@ def tensorProduct(vecA,vecB):
 
 
 def kroneckerProduct(matA,matB):
-    #print()
+    """Function calculating the kronecker product between two matrices
+
+    I.e. higher-dimensional tensor product.
+
+    Parameters
+    ----------
+    matA : numpy array
+        Leftmost matrix in kronecker product.
+    matB : numpy array
+        Rightmost array in product.
+
+    Returns
+    -------
+    numpy array
+        Kronecker product of matA (x) matB.
+    """
+
     matZ = np.zeros((matA.shape[0]*matB.shape[0], matA.shape[1]*matB.shape[1]))
-    #print(matA.shape[0],matA.shape[1],matB.shape[0],matB.shape[1])
     for i in range(matZ.shape[0]):
         for j in range(matZ.shape[1]):
-            #print(i,j)
             matZ[i][j] = matA[i//matB.shape[0]][j//matB.shape[1]]*matB[i%matB.shape[0]][j%matB.shape[1]]
     return matZ
 
 
 ### Helper Functions ----------------------------------------------------------------------------------------------------
 def vecMatProduct(mat,vec):
-    """TODO: takes a matrix and a single array vector and formats them for the matrixProduct() function."""
+    """ TODO: takes a matrix and a single array vector and formats them for the matrixProduct() function.
+
+    Parameters
+    ----------
+    mat : numpy array
+        2D Matrix.
+    vec : numpy array
+        1D Vector.
+
+    Returns
+    -------
+    numpy array
+        Formatted product.
+    """
+
     vecR = np.resize(vec,(len(vec),1))
     return matrixProduct(mat,vecR)[:,0]
 
 
 def constructGate(code):
-    """ This takes a code representing the gate at each qubit and returns an array representing the operation"""
+    """ Function constructing matrix representing gate dynamically
+
+    Works by parsing a carefully formatted string representing the gate
+    at each qubit and returns an array representing the operation
+
+    Parameters
+    ----------
+    code : str
+        Sequence/"code" used to generate specific gate matrix.
+
+    Returns
+    -------
+    numpy array
+        Matrix which when acted on a particular register will have the same
+        effect as applying the theoretical quantum gate.
+    """
+
     matrix = np.array([[1]])
     TofN = 0
     for char in code:
