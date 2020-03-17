@@ -119,11 +119,13 @@ def Grovers(nq, s, cout):
     #Initialising Register in a uniform superposition
     if cout:
         print("-------Initialising Register-------" + '\n')
+    #pass an n-qbit determinate state 0
     R = re.Register(qs.State((0,nq)))
     start_time = time.time()
+    #n-dimensional hadamard creates uniform superposition of states up until state(2**nq)
     R.applyGate(H)
 
-    #Iterating -it times
+    #Iterating -it times (most accurate order of iteration, ussually simply quoted as root(n))
     it = int(np.pi/(4*np.arcsin(1/np.sqrt(2**nq))))
     if cout:
         print('\n'+ f"Running Grover's, {it} times:")
@@ -178,7 +180,7 @@ def Observe_System(R, n, nq):
     R : register.Register
         Custom register object.
     n : int
-        Number of times to run Grover's for.
+        Number of times to simulate running Grover's for.
     nq : int
         Number of quibits used to represent each state.
     """
@@ -193,7 +195,7 @@ def Observe_System(R, n, nq):
     for s in States:
         freq.append(Obs.count(s))
 
-    print('\n' + f"# of Occurances of each state after measuring the system {n} times:")
+    print('\n' + f"# of Occurences of each state after measuring the system {n} times:")
     for i in range(len(freq)):
         print(f"{States[i]}: {freq[i]}")
 
