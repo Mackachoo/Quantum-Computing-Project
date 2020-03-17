@@ -302,10 +302,17 @@ def constructGate(code, sparse = False):
             TofN = int(char)
         elif TofN != 0:
             Tof = np.identity(2**TofN)
-            gate = gates[char]
-            for x in range(len(gates)):
-                for y in range(len(gates)):
-                    Tof[len(Tof)-len(gate)+x%len(gate)][len(Tof)-len(gate)+y%len(gate)] = gate[x%len(gate)][y%len(gate)]
+            if sparse:
+                gate = sgates[char]
+                Tof = sp.sparse(Tof)
+                for x in range(len(gates)):
+                    for y in range(len(gates)):
+                        Tof[(len(Tof)-len(gate)+x%len(gate) , len(Tof)-len(gate)+y%len(gate))] = sgate[(x%len(gate),y%len(gate))
+            else:
+                gate = gates[char]
+                for x in range(len(gates)):
+                    for y in range(len(gates)):
+                        Tof[len(Tof)-len(gate)+x%len(gate)][len(Tof)-len(gate)+y%len(gate)] = gate[x%len(gate)][y%len(gate)]
             matrix = kroneckerProduct(matrix,Tof)
             TofN = 0
         else:
