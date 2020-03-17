@@ -15,7 +15,7 @@ Assume all matrices considered are square
                     if m[x][y] != 0:
                         self.matrixDict[(x,y)] = m[x][y]
             self.len = len(self.matrixDict)
-            self.size = len(m)
+            self.size = (len(m),len(m[0]))
         if isinstance(m, dict):
             self.matrixDict = m
             self.len = len(self.matrixDict)
@@ -26,15 +26,16 @@ Assume all matrices considered are square
                 for pos in m:
                     #print(self.size)
                     #print(pos)
-                    if pos[0] > self.size:
-                        self.size = pos[0]
-                    if pos[1] > self.size:
-                        self.size = pos[1]
-                self.size += 1
+                    if pos[0] > self.size[0]:
+                        self.size[0] = pos[0]
+                    if pos[1] > self.size[1]:
+                        self.size[1] = pos[1]
+                self.size[0] += 1
+                self.size[1] += 1
 
 
     def asMatrix(self):
-        output = np.zeros((self.size,self.size))
+        output = np.zeros((self.size[0],self.size[1]))
         for pos in self.matrixDict:
             output[pos[0]][pos[1]] = self.matrixDict[pos]
         return output
