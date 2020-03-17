@@ -258,12 +258,12 @@ def vecMatProduct(mat,vec):
     ----------
     mat : numpy array or sp.Sparse
         2D Matrix.
-    vec : numpy array or sp.Sparse
+    vec : numpy array
         1D Vector.
 
     Returns
     -------
-    numpy array or sp.Sparse
+    numpy array
         Formatted product.
     """
     if isinstance(mat, np.ndarray):
