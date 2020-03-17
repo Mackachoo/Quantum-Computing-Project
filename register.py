@@ -68,7 +68,7 @@ class Register():
             matrix to be applied to the register's vector representation.
         """
 
-        self.signVector = op.matrixProduct(gate, self.signVector)
+        self.signVector = op.vecMatProduct(gate, self.signVector)
 
     def measure(self):
         """Colapses the System into one state depending on amplitudes of
