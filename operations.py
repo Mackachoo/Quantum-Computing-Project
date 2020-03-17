@@ -316,18 +316,14 @@ def constructGate(code, sparse = False):
     return matrix
 
 
-"""
-a = np.identity(50)
-b = np.random.rand(50,50)
+
 #print(b)
-sa = sp.sparse(a)
-sb = sp.sparse(b)
+
 t0 = time()
-asdf = matrixProduct(a,b)
+#X = constructGate('HHHHHHHHHHH')
 t1 = time()
-asfd = matrixProduct(sa,sb)
+X = constructGate('HHHHHHHHHHH', sparse = True)
 t2 = time()
 
 print(f"Original in {t1-t0} secs:\nNew in {t2-t1} secs:\n")
 print(f"{t0} -> {t1} -> {t2}")
-"""
