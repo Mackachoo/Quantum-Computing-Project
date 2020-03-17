@@ -15,7 +15,7 @@ gates = {
                     [1j,0]]),
     'Z' : np.array([[1,0],
                     [0,-1]])
-
+                    
 }
 
 
@@ -27,14 +27,14 @@ def matrixSum(matA,matB):
 
     Parameters
     ----------
-    matA : numpy array or sp.sparse
+    matA : numpy array or sp.Sparse
         First matrix in sum.
-    matB : numpy array or sp.sparse
+    matB : numpy array or sp.Sparse
         Second matrix in sum.
 
     Returns
     -------
-    numpy array or sp.sparse
+    numpy array or sp.Sparse
         Sum of matA + matB.
     """
 
@@ -47,7 +47,7 @@ def matrixSum(matA,matB):
                 for j in range(matA.shape[1]):
                     matZ[i][j] = matA[i][j]+matB[i][j]
             return matZ
-    elif isinstance(matA, sp.sparse) & isinstance(matA, sp.sparse):
+    elif isinstance(matA, sp.Sparse) & isinstance(matA, sp.Sparse):
         for b in matB.matrixDict:
             if b in matA.matrixDict:
                 matA.matrixDict[b] += matB.matrixDict[b]
@@ -64,14 +64,14 @@ def matrixProduct(matA,matB):
 
     Parameters
     ----------
-    matA : numpy array or sp.sparse
+    matA : numpy array or sp.Sparse
         Leftmost matrix in product.
-    matB : numpy array or sp.sparse
+    matB : numpy array or sp.Sparse
         Rightmost matrix in product.
 
     Returns
     -------
-    numpy array or sp.sparse
+    numpy array or sp.Sparse
         Matrix being a product of (matA x matB).
     """
 
@@ -85,7 +85,7 @@ def matrixProduct(matA,matB):
                     for n in range(matA.shape[1]):
                         matZ[i][j] += matA[i][n]*matB[n][j]
             return matZ
-    elif isinstance(matA, sp.sparse) & isinstance(matB, sp.sparse):
+    elif isinstance(matA, sp.Sparse) & isinstance(matB, sp.Sparse):
         matZ = {}
         for a in matA.matrixDict:
             for b in matB.matrixDict:
@@ -94,7 +94,7 @@ def matrixProduct(matA,matB):
                         matZ[(b[0],a[1])] += matA.matrixDict[a]*matB.matrixDict[b]
                     else:
                         matZ[(b[0],a[1])] = matA.matrixDict[a]*matB.matrixDict[b]
-        return sp.sparse(matZ)
+        return sp.Sparse(matZ)
     else:
         print("ERROR : Incorrect type for one or more matrices.")
 
@@ -106,7 +106,7 @@ def matrixDet(mat):
 
     Parameters
     ----------
-    mat : numpy array or sp.sparse
+    mat : numpy array or sp.Sparse
         Square matrix whose dterminant will be found.
 
     Returns
@@ -117,7 +117,7 @@ def matrixDet(mat):
 
     if isinstance(mat, np.ndarray):
         return determinant(mat)
-    elif isinstance(mat, sp.sparse):
+    elif isinstance(mat, sp.Sparse):
         #cons = np.array([ (-1)**((x+1)//2) for x in range(m.factorial(mat.size))])
         return determinant(mat.asMatrix)
     else:
@@ -150,19 +150,19 @@ def matrixInv(mat):
 
     Parameters
     ----------
-    mat : numpy array or sp.sparse
+    mat : numpy array or sp.Sparse
         Matrix whose inverse will be found.
 
     Returns
     -------
-    numpy array or sp.sparse
+    numpy array or sp.Sparse
         Inverted matrix whose operation reverses that of mat.
     """
     if isinstance(mat, np.ndarray):
         return inverter(mat[0])
-    elif isinstance(mat, sp.sparse):
+    elif isinstance(mat, sp.Sparse):
         #cons = np.array([ (-1)**((x+1)//2) for x in range(m.factorial(mat.size))])
-        return sp.sparse(inverter(mat.asMatrix))
+        return sp.Sparse(inverter(mat.asMatrix))
     else:
         print("ERROR : Incorrect type for matrix.")
 
@@ -216,14 +216,14 @@ def kroneckerProduct(matA,matB):
 
     Parameters
     ----------
-    matA : numpy array or sp.sparse
+    matA : numpy array or sp.Sparse
         Leftmost matrix in kronecker product.
-    matB : numpy array or sp.sparse
+    matB : numpy array or sp.Sparse
         Rightmost array in product.
 
     Returns
     -------
-    numpy array or sp.sparse
+    numpy array or sp.Sparse
         Kronecker product of matA (x) matB.
     """
     if isinstance(matA, np.ndarray) & isinstance(matB, np.ndarray):
@@ -232,12 +232,12 @@ def kroneckerProduct(matA,matB):
             for j in range(matZ.shape[1]):
                 matZ[i][j] = matA[i//matB.shape[0]][j//matB.shape[1]]*matB[i%matB.shape[0]][j%matB.shape[1]]
         return matZ
-    elif isinstance(matA, sp.sparse) & isinstance(matB, sp.sparse):
+    elif isinstance(matA, sp.Sparse) & isinstance(matB, sp.Sparse):
         matZ = {}
         for a in matA.matrixDict:
             for b in matB.matrixDict:
                 matZ[( b[0]+a[0]*matB.size , b[1]+a[1]*matB.size )] = matA.matrixDict[a]*matB.matrixDict[b]
-        return sp.sparse(matZ, matA.size*matB.size)
+        return sp.Sparse(matZ, matA.size*matB.size)
 
 
 ### Helper Functions ----------------------------------------------------------------------------------------------------
@@ -246,20 +246,20 @@ def vecMatProduct(mat,vec):
 
     Parameters
     ----------
-    mat : numpy array or sp.sparse
+    mat : numpy array or sp.Sparse
         2D Matrix.
-    vec : numpy array or sp.sparse
+    vec : numpy array or sp.Sparse
         1D Vector.
 
     Returns
     -------
-    numpy array or sp.sparse
+    numpy array or sp.Sparse
         Formatted product.
     """
     if isinstance(mat, np.ndarray) & isinstance(vec, np.ndarray):
         vecR = np.resize(vec,(len(vec),1))
         return matrixProduct(mat,vecR)[:,0]
-    elif isinstance(mat, sp.sparse) & isinstance(vec, sp.sparse):           # Not entirely sure if this works.
+    elif isinstance(mat, sp.Sparse) & isinstance(vec, sp.Sparse):           # Not entirely sure if this works.
         return matrixProduct(mat,vecR)
     else:
         print("ERROR : Incorrect type for matrix and/or vector.")
@@ -301,12 +301,11 @@ def constructGate(code):
     return matrix
 
 
-"""
 a = np.identity(50)
-b = np.random.rand(50,50)
+b = np.identity(50)
 #print(b)
-sa = sp.sparse(a)
-sb = sp.sparse(b)
+sa = sp.Sparse(a)
+sb = sp.Sparse(b)
 t0 = time()
 asdf = matrixProduct(a,b)
 t1 = time()
@@ -315,4 +314,3 @@ t2 = time()
 
 print(f"Original in {t1-t0} secs:\nNew in {t2-t1} secs:\n")
 print(f"{t0} -> {t1} -> {t2}")
-"""

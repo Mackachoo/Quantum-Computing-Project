@@ -1,9 +1,9 @@
 import numpy as np
 
-class sparse():
+class Sparse():
     """
-Class for sparse matrices
-TODO: Implement matrix product, matrix acting on vector and kronecker product for csr_sparse matrices
+Class for Sparse matrices
+TODO: Implement matrix product, matrix acting on vector and kronecker product for csr_Sparse matrices
 Assume all matrices considered are square
     """
 
