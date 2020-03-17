@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 
-def Oracle(nq, s):
+def Oracle(nq, s, Sparse = "False"):
     """ Function that dynamically creates the oracle gate
 
     Using deterministic algorithm for mode s, with number of qubits nq,
@@ -37,13 +37,13 @@ def Oracle(nq, s):
             Neg+="I"
 
     #Constructs the matrices representing the leftmost and rightmost operations
-    L = op.constructGate(Neg)
+    L = op.constructGate(Neg, Sparse)
     #Constructs the nq-dimansional CNOT gate (middle layer)
-    Z = op.constructGate(f"{nq}Z")
-    return np.dot(np.dot(L, Z), L)
+    Z = op.constructGate(f"{nq}Z", Sparse)
+    return op.matrixProduct(op.matrixProduct(L, Z), L)
 
 
-def Hadamard(nq):
+def Hadamard(nq, Sparse = "False"):
     """ Constructs the Hadamard gate (that is to be applied to all qubits)
 
     Parameters
@@ -58,7 +58,7 @@ def Hadamard(nq):
         gate on a quantum register
     """
 
-    H = op.constructGate('H'*nq)
+    H = op.constructGate('H'*nq, Sparse)
     return H
 
 
