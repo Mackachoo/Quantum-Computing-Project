@@ -71,7 +71,7 @@ class Register():
         vec = self.signVector
         if Sparce:
             vec = sp.Sparce(vec,(len(vec),len(vec[0])))
-        self.signVector = op.matrixProduct(gate, vec)
+        self.signVector = op.vecMatProduct(gate, vec)
 
     def measure(self):
         """Colapses the System into one state depending on amplitudes of
