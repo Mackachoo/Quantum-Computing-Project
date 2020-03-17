@@ -271,8 +271,9 @@ def vecMatProduct(mat,vec):
         return matrixProduct(mat,vecR)[:,0]
     elif isinstance(mat, sp.Sparse):           # Not entirely sure if this works.
         V = [0]*len(vec)
-        for i in mat.matrixDict:
-            V[i[0]] += mat.matrixDict[i]*vec[i[1]]
+        for i in range(len(vec)):
+            for j in range(len(vec)):
+                V[i] += mat.matrixDict[(i,j)]*vec[i]
         return np.array(V)
     else:
         print("ERROR 6 : Incorrect type for matrix and/or vector.")
@@ -325,15 +326,15 @@ def constructGate(code, Sparse = False):
                 matrix = kroneckerProduct(matrix,gates[char])
     return matrix
 
+X = constructGate('2Z')
+sX = constructGate('2Z', Sparse = True)
+v = np.array([1,0,0,0])
 
-"""
 t0 = time()
-X = constructGate('4Z')
+V1 = np.dot(X, v)
 t1 = time()
-sX = constructGate('4Z', Sparse = True)
+V2 = vecMatProduct(X, v)
 t2 = time()
 
-#print(f"Original in {t1-t0} secs:\nNew in {t2-t1} secs:\n")
-#print(f"{t0} -> {t1} -> {t2}")
-#print(f"{len(X)}\n{sX.size}")
-"""
+print(f"dot in {t1-t0} secs:\nsparse in {t2-t1} secs:\n")
+print(f"{V1}\n{V2}")
