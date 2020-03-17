@@ -18,6 +18,16 @@ gates = {
 
 }
 
+sgates = {
+
+    'H' : sp.sparse(gates['H']),
+    'I' : sp.sparse(gates['I']),
+    'X' : sp.sparse(gates['X']),
+    'Y' : sp.sparse(gates['Y']),
+    'Z' : sp.sparse(gates['Z'])
+
+}
+
 
 
 ### Matrix Addition!   -------------------------------------------------------------------------------------------------
