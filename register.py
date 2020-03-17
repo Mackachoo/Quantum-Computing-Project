@@ -3,6 +3,7 @@ import quantum_states as qs
 import math as m
 import operations as op
 from random import random as rnd
+import sparse as sp
 
 
 class Register():
@@ -40,7 +41,7 @@ class Register():
     self.qbitVector = [Register(0,1), Register(1,1)] (i.e. a list of pure "states" [|0>, |1>])
     """
 
-    def __init__(self,input):
+    def __init__(self,input, Sparse=False):
         """
         Parameters
         ----------
@@ -56,7 +57,7 @@ class Register():
         self.qbitVector = np.array([qs.State((i,self.qR.values[1])) for i in range(self.qR.d)])
 
 
-    def applyGate(self, gate):
+    def applyGate(self, gate, Sparce = False):
         """Operates the matrix "gate" on the register.
 
         Used for Haddamard, Oracle, and Diffuser gates dynamically.
@@ -67,8 +68,10 @@ class Register():
         gate : numpy array
             matrix to be applied to the register's vector representation.
         """
-
-        self.signVector = op.matrixProduct(gate, self.signVector)
+        vec = self.signVector
+        if Sparce:
+            vec = sp.Sparce(vec,(len(vec),len(vec[0])))
+        self.signVector = op.matrixProduct(gate, vec)
 
     def measure(self):
         """Colapses the System into one state depending on amplitudes of

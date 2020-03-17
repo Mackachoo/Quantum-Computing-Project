@@ -104,7 +104,7 @@ def matrixProduct(matA,matB):
                         matZ[(b[0],a[1])] += matA.matrixDict[a]*matB.matrixDict[b]
                     else:
                         matZ[(b[0],a[1])] = matA.matrixDict[a]*matB.matrixDict[b]
-        return sp.Sparse(matZ, matA.size)
+        return sp.Sparse(matZ, (matA.size[0],matB.size[1]))
     else:
         print("ERROR : Incorrect type for one or more matrices.")
 
@@ -188,7 +188,7 @@ def inverter(mat):
                 matN = np.delete(mat, i, 1)
                 matN = np.delete(matN, j, 0)
                 matZ[i][j] = (1/det)*(1-2*((i+j)%2))*matrixDet(matN)
-        size = mat.shape[0]
+        size = (mat.shape[0],mat.shape[1])
         return matZ, size
 
 
@@ -247,7 +247,7 @@ def kroneckerProduct(matA,matB):
         for a in matA.matrixDict:
             for b in matB.matrixDict:
                 matZ[( b[0]+a[0]*matB.size , b[1]+a[1]*matB.size )] = matA.matrixDict[a]*matB.matrixDict[b]
-        return sp.Sparse(matZ, matA.size*matB.size)
+        return sp.Sparse(matZ, (matA.size[0]*matB.size[0],matA.size[1]*matB.size[1]))
 
 
 ### Helper Functions ----------------------------------------------------------------------------------------------------
