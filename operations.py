@@ -270,10 +270,10 @@ def vecMatProduct(mat,vec):
         vecR = np.resize(vec,(len(vec),1))
         return matrixProduct(mat,vecR)[:,0]
     elif isinstance(mat, sp.Sparse):
-        V = np.array([0]*len(vec))
+        V = [0]*len(vec)
         for pos in mat.matrixDict:
             V[pos[0]] += mat.matrixDict[pos]*vec[pos[1]]
-        return V
+        return np.array(V)
     else:
         print("ERROR 6 : Incorrect type for matrix and/or vector.")
 
