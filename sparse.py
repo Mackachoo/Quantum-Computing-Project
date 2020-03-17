@@ -22,7 +22,7 @@ Assume all matrices considered are square
             if s != None:
                 self.size = s
             else:                    # Guesses the matrix size if none given.
-                self.size = 0
+                self.size = (0,0)
                 for pos in m:
                     #print(self.size)
                     #print(pos)

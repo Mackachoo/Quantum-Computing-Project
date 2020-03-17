@@ -122,17 +122,17 @@ def Grovers(nq, s, cOut, Sparse = False):
     R = re.Register(qs.State((0,nq)))
     start_time = time.time()
     #n-dimensional hadamard creates uniform superposition of states up until state(2**nq)
-    R.applyGate(H)
+    R.applyGate(H, Sparse)
 
     #Iterating -it times (most accurate order of iteration, ussually simply quoted as root(n))
     it = int(np.pi/(4*np.arcsin(1/np.sqrt(2**nq))))
     if cOut:
         print('\n'+ f"Running Grover's, {it} times:")
     for i in range(it):
-        R.applyGate(Orac)
-        R.applyGate(H)
-        R.applyGate(Diff)
-        R.applyGate(H)
+        R.applyGate(Orac, Sparse)
+        R.applyGate(H, Sparse)
+        R.applyGate(Diff, Sparse)
+        R.applyGate(H, Sparse)
     Dt = time.time() - start_time
     return R, Dt
 

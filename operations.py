@@ -65,7 +65,7 @@ def matrixSum(matA,matB):
                 matA.matrixDict[b] = matB.matrixDict[b]
         return matA
     else:
-        print("ERROR : Incorrect type for one or more matrices.")
+        print("ERROR 0 : Incorrect type for one or more matrices.")
 
 ### Matrix multiplication!   -------------------------------------------------------------------------------------------
 
@@ -106,7 +106,7 @@ def matrixProduct(matA,matB):
                         matZ[(b[0],a[1])] = matA.matrixDict[a]*matB.matrixDict[b]
         return sp.Sparse(matZ, (matA.size[0],matB.size[1]))
     else:
-        print("ERROR : Incorrect type for one or more matrices.")
+        print("ERROR 1 : Incorrect type for one or more matrices.")
 
 
 ### Determinant of Matrix!   -------------------------------------------------------------------------------------------
@@ -131,7 +131,7 @@ def matrixDet(mat):
         #cons = np.array([ (-1)**((x+1)//2) for x in range(m.factorial(mat.size))])
         return determinant(mat.asMatrix)
     else:
-        print("ERROR : Incorrect type for matrix.")
+        print("ERROR 2 : Incorrect type for matrix.")
 
 def determinant(mat):
     if mat.shape[0] != mat.shape[1]:
@@ -174,12 +174,12 @@ def matrixInv(mat):
         #cons = np.array([ (-1)**((x+1)//2) for x in range(m.factorial(mat.size))])
         return sp.Sparse(inverter(mat.asMatrix))
     else:
-        print("ERROR : Incorrect type for matrix.")
+        print("ERROR 3 : Incorrect type for matrix.")
 
 
 def inverter(mat):
     if mat.shape[0] != mat.shape[1]:
-        print("ERROR : Non NxN matrices")
+        print("ERROR 4 : Non NxN matrices")
     else:
         det = matrixDet(mat)
         matZ = np.zeros(mat.shape)
@@ -246,9 +246,10 @@ def kroneckerProduct(matA,matB):
         matZ = {}
         for a in matA.matrixDict:
             for b in matB.matrixDict:
-                matZ[( b[0]+a[0]*matB.size , b[1]+a[1]*matB.size )] = matA.matrixDict[a]*matB.matrixDict[b]
+                matZ[( b[0]+a[0]*matB.size[0] , b[1]+a[1]*matB.size[1] )] = matA.matrixDict[a]*matB.matrixDict[b]
         return sp.Sparse(matZ, (matA.size[0]*matB.size[0],matA.size[1]*matB.size[1]))
-
+    else:
+        print("ERROR 5 : Incorrect type for one or more matrices.")
 
 ### Helper Functions ----------------------------------------------------------------------------------------------------
 def vecMatProduct(mat,vec):
@@ -270,9 +271,9 @@ def vecMatProduct(mat,vec):
         vecR = np.resize(vec,(len(vec),1))
         return matrixProduct(mat,vecR)[:,0]
     elif isinstance(mat, sp.Sparse) & isinstance(vec, sp.Sparse):           # Not entirely sure if this works.
-        return matrixProduct(mat,vecR)
+        return matrixProduct(mat,vec)
     else:
-        print("ERROR : Incorrect type for matrix and/or vector.")
+        print("ERROR 6 : Incorrect type for matrix and/or vector.")
 
 
 def constructGate(code, Sparse = False):
@@ -303,10 +304,10 @@ def constructGate(code, Sparse = False):
         elif TofN != 0:
             if Sparse:
                 gate = sgates[char]
-                Tof = sp.Sparse(np.identity(2**TofN-gate.size))
-                Tof.size += gate.size
+                l = 2**TofN-gate.size[0]
+                Tof = sp.Sparse(np.identity(l), (l+gate.size[0],l+gate.size[0]))
                 for pos in gate.matrixDict:
-                    Tof.matrixDict[((Tof.size)-(gate.size)+pos[0]%(gate.size) , (Tof.size)-(gate.size)+pos[1]%(gate.size))] = gate.matrixDict[(pos[0]%(gate.size),pos[1]%(gate.size))]
+                    Tof.matrixDict[((Tof.size[0])-(gate.size[0])+pos[0]%(gate.size[0]) , (Tof.size[1])-(gate.size[1])+pos[1]%(gate.size[1]))] = gate.matrixDict[(pos[0]%(gate.size[0]),pos[1]%(gate.size[1]))]
             else:
                 Tof = np.identity(2**TofN)
                 gate = gates[char]

@@ -57,7 +57,7 @@ class Register():
         self.qbitVector = np.array([qs.State((i,self.qR.values[1])) for i in range(self.qR.d)])
 
 
-    def applyGate(self, gate, Sparce = False):
+    def applyGate(self, gate, Sparse = False):
         """Operates the matrix "gate" on the register.
 
         Used for Haddamard, Oracle, and Diffuser gates dynamically.
@@ -69,9 +69,10 @@ class Register():
             matrix to be applied to the register's vector representation.
         """
         vec = self.signVector
-        if Sparce:
-            vec = sp.Sparce(vec,(len(vec),len(vec[0])))
-        self.signVector = op.vecMatProduct(gate, vec)
+        if Sparse:
+            shape = (len(vec),1)
+            vec = sp.Sparse(np.resize(vec, shape), shape)
+        self.signVector = op.vecMatProduct(gate, vec).asMatrix()
 
     def measure(self):
         """Colapses the System into one state depending on amplitudes of
