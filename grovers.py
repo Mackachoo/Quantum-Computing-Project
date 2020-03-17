@@ -21,7 +21,7 @@ def Oracle(nq, s, Sparse = False):
 
     Returns
     -------
-    numpy array
+    numpy array or sp.Sparse
         returns an nq-dimensional numpy array which can be applied as an Oracle
         gate on a quantum register
 
@@ -53,7 +53,7 @@ def Hadamard(nq, Sparse = False):
 
     Returns
     -------
-    numpy array
+    numpy array or sp.Sparse
         returns an nq-dimensional numpy array which can be applied as a Hadamard
         gate on a quantum register
     """
@@ -72,7 +72,7 @@ def Diffuser(nq, Sparse = False):
 
     Returns
     -------
-    numpy array
+    numpy array or sp.Sparse
         returns an nq-dimensional numpy array which can be applied as a Diffuser
         gate on a quantum register
     """

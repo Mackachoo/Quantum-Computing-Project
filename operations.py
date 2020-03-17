@@ -152,7 +152,6 @@ def determinant(mat):
 
 ### Matrix Inversion!   ------------------------------------------------------------------------------------------------
 
-
 def matrixInv(mat):
     """
      Find the matrix inverse for square matrix mat.
@@ -192,7 +191,7 @@ def inverter(mat):
 
 
 ### Tensor Product   ---------------------------------------------------------------------------------------------------
-#Input lists (e.g. if in 4d space, |2> = [0,0,1,0])
+
 def tensorProduct(vecA,vecB):
     """Function calculating tensor product of two vectors in vectorial form
 
@@ -291,7 +290,7 @@ def constructGate(code, Sparse = False):
 
     Returns
     -------
-    numpy array
+    numpy array or sp.Sparse
         Matrix which when acted on a particular register will have the same
         effect as applying the theoretical quantum gate.
     """
@@ -325,6 +324,8 @@ def constructGate(code, Sparse = False):
                 matrix = kroneckerProduct(matrix,gates[char])
     return matrix
 
+
+"""
 X = constructGate('2Z')
 sX = constructGate('2Z', Sparse = True)
 v = np.array([1,0,0,0])
@@ -337,3 +338,4 @@ t2 = time()
 
 print(f"dot in {t1-t0} secs:\nsparse in {t2-t1} secs:\n")
 print(f"{V1}\n{V2}")
+"""
