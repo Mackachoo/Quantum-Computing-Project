@@ -301,14 +301,15 @@ def constructGate(code, sparse = False):
         if char.isdigit():
             TofN = int(char)
         elif TofN != 0:
-            Tof = np.identity(2**TofN)
             if sparse:
                 gate = sgates[char]
-                Tof = sp.sparse(Tof)
-                for x in range(len(gates)):
-                    for y in range(len(gates)):
-                        Tof[(len(Tof)-(gate.size)+x%(gate.size) , len(Tof)-(gate.size)+y%(gate.size)] = gate[(x%(gate.size),y%(gate.size))]
+                Tof = sp.sparse(np.identity(2**TofN-gate.size))
+                Tof.size += gate.size
+                for pos in gate.matrixDict:
+                    print(pos)
+                    Tof.matrixDict[((Tof.size)-(gate.size)+pos[0]%(gate.size) , (Tof.size)-(gate.size)+pos[1]%(gate.size))] = gate.matrixDict[(pos[0]%(gate.size),pos[1]%(gate.size))]
             else:
+                Tof = np.identity(2**TofN)
                 gate = gates[char]
                 for x in range(len(gates)):
                     for y in range(len(gates)):
@@ -323,14 +324,14 @@ def constructGate(code, sparse = False):
     return matrix
 
 
-
-#print(b)
-
+"""
 t0 = time()
-#X = constructGate('HHHHHHHHHHH')
+X = constructGate('3H')
 t1 = time()
-X = constructGate('HHHHHHHHHHH', sparse = True)
+sX = constructGate('3H', sparse = True)
 t2 = time()
 
 print(f"Original in {t1-t0} secs:\nNew in {t2-t1} secs:\n")
 print(f"{t0} -> {t1} -> {t2}")
+print(f"{X}\n{sX}")
+"""
