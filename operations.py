@@ -307,7 +307,7 @@ def constructGate(code, sparse = False):
                 Tof = sp.sparse(Tof)
                 for x in range(len(gates)):
                     for y in range(len(gates)):
-                        Tof[(len(Tof)-len(gate)+x%len(gate) , len(Tof)-len(gate)+y%len(gate))] = sgate[(x%len(gate),y%len(gate))
+                        Tof[(len(Tof)-(gate.size)+x%(gate.size) , len(Tof)-(gate.size)+y%(gate.size)] = gate[(x%(gate.size),y%(gate.size))]
             else:
                 gate = gates[char]
                 for x in range(len(gates)):
