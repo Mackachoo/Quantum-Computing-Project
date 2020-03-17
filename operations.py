@@ -326,13 +326,14 @@ def constructGate(code, Sparse = False):
     return matrix
 
 
-
+"""
 t0 = time()
-X = constructGate('ZZ')
+X = constructGate('4Z')
 t1 = time()
-sX = constructGate('ZZ', Sparse = True)
+sX = constructGate('4Z', Sparse = True)
 t2 = time()
 
-print(f"Original in {t1-t0} secs:\nNew in {t2-t1} secs:\n")
-print(f"{t0} -> {t1} -> {t2}")
-print(f"{X}\n{sX.size}")
+#print(f"Original in {t1-t0} secs:\nNew in {t2-t1} secs:\n")
+#print(f"{t0} -> {t1} -> {t2}")
+#print(f"{len(X)}\n{sX.size}")
+"""
