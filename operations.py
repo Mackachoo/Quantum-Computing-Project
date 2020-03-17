@@ -266,11 +266,14 @@ def vecMatProduct(mat,vec):
     numpy array or sp.Sparse
         Formatted product.
     """
-    if isinstance(mat, np.ndarray) & isinstance(vec, np.ndarray):
+    if isinstance(mat, np.ndarray):
         vecR = np.resize(vec,(len(vec),1))
         return matrixProduct(mat,vecR)[:,0]
-    elif isinstance(mat, sp.Sparse) & isinstance(vec, sp.Sparse):           # Not entirely sure if this works.
-        return matrixProduct(mat,vec)
+    elif isinstance(mat, sp.Sparse):           # Not entirely sure if this works.
+        V = [0]*len(vec)
+        for i in mat.matrixDict:
+            V[i[0]] += mat.matrixDict[i]*vec[i[1]]
+        return np.array(V)
     else:
         print("ERROR 6 : Incorrect type for matrix and/or vector.")
 
@@ -323,14 +326,13 @@ def constructGate(code, Sparse = False):
     return matrix
 
 
-"""
+
 t0 = time()
-X = constructGate('10Z')
+X = constructGate('ZZ')
 t1 = time()
-sX = constructGate('10Z', Sparse = True)
+sX = constructGate('ZZ', Sparse = True)
 t2 = time()
 
 print(f"Original in {t1-t0} secs:\nNew in {t2-t1} secs:\n")
 print(f"{t0} -> {t1} -> {t2}")
 print(f"{X}\n{sX.size}")
-"""

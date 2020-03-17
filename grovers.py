@@ -128,11 +128,13 @@ def Grovers(nq, s, cOut, Sparse = False):
     it = int(np.pi/(4*np.arcsin(1/np.sqrt(2**nq))))
     if cOut:
         print('\n'+ f"Running Grover's, {it} times:")
+    print(R)
     for i in range(it):
         R.applyGate(Orac, Sparse)
         R.applyGate(H, Sparse)
         R.applyGate(Diff, Sparse)
         R.applyGate(H, Sparse)
+        print(R)
     Dt = time.time() - start_time
     return R, Dt
 
@@ -180,7 +182,7 @@ def Observe_System(R, n, nq):
         Custom register object.
     n : int
         Number of times Grover's was "ran". Grover's doesn't actually have to be ran
-        n times, as the final amplitudes are definite. 
+        n times, as the final amplitudes are definite.
     nq : int
         Number of quibits used to represent each state.
     """

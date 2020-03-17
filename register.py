@@ -68,11 +68,7 @@ class Register():
         gate : numpy array
             matrix to be applied to the register's vector representation.
         """
-        vec = self.signVector
-        if Sparse:
-            shape = (len(vec),1)
-            vec = sp.Sparse(np.resize(vec, shape), shape)
-        self.signVector = op.vecMatProduct(gate, vec).asMatrix()
+        self.signVector = op.vecMatProduct(gate, self.signVector)
 
     def measure(self):
         """Colapses the System into one state depending on amplitudes of
