@@ -17,7 +17,35 @@ from errors import InputError
 
 
 class QubitState(ABC):
-    """Base class for Qubit and IntQubit"""
+    """ Base class for State serving as an interface.
+    Methods are all abstract and overriden in child classes
+
+    Parameters
+    ----------
+    values : tuple
+        Contains the (state, no. qubits used to represent it).
+    ket : Bool=True
+        sets wether to treat state in bra or ket representation,
+        used to set vector and string representations
+
+    Attributes
+    ----------
+    vals : tuple
+        tuple of (state, no. of qubits) .
+    strRep : str
+        string representation of superposition of states.
+    ket: Bool
+        property dictating vector and string representation
+
+    Methods
+    -------
+    flip(self)
+        flip ket to a bra and viceversa
+    dotWith(self, ket)
+        dot operation between state's vector representation and another object
+    __str__(self)
+        represent state in string representation
+    """
 
     @abstractmethod
     def __init__(self, values, ket=True):
@@ -28,28 +56,14 @@ class QubitState(ABC):
 
         self.strRep = ""
 
-    @property
-    def nQubits(self):
-        """ TODO: override me to show bit number (decide alternative for denary)"""
-
-        return len(self.vals)
-
-    @property
-    def qubitVals(self):
-        """ TODO: return the values of the qubits as a tuple."""
-
-        return (self.vals)
-
     @abstractmethod
     def flip(self):
         """ TODO: Flip the ket to a bra"""
-
         self.ket = False
 
     @abstractmethod
     def dotWith(self, ket):
         """ TODO: Implement dot product with another ket"""
-
         pass
 
     @abstractmethod
@@ -64,25 +78,40 @@ class QubitState(ABC):
 
 
 class State(QubitState):
-    """A multi-qubit ket in the computational (z) basis.
+    """Class representing a multi-qubit ket(state) in the computational (z) basis.
 
-    We use the normal binary convention that the least significant qubit is on the
-    right, so |00001> has a 1 in the least significant qubit.
+    -Note: We use the normal binary convention that the least significant
+     qubit is on the right, so |00001> has a 1 in the least significant qubit.
 
     Parameters
-    ==========
+    ----------
+    values : tuple
+        Contains the (state, no. qubits used to represent it).
+    ket : Bool=True
+        sets wether to treat state in bra or ket representation,
+        used to set vector and string representations
 
-    values : list, str
-
-        The qubit values as a list of ints: ([0,0,0,1,1]), a string: ('011'),
-        or a tuple: (3,3) = [0, 1, 1].
-
-        First tuple element is the representation of the state in denary
-        second element is the dimensionality of our state space (i.e. # of elements in the vector).
-        e.g.
-        (1, 4) = [0,0,0,1]
-        (0, 4) = [0,0,0,0]
-        (9, 4) = [1,0,0,1]
+    Attributes
+    ----------
+    values : tuple
+        tuple of (state, no. of qubits)
+            First element is the representation of the state in denary,
+            second element is the dimensionality of our state space.
+            e.g: (1, 4) = [0,0,0,1]
+    strRep : str
+        string representation of superposition of states.
+    ket: Bool
+        property dictating vector and string representation
+    d : int
+        dimensionality of state, i.e. qubits used to represent it.
+    den : int
+        denary representation of state, i.e. |011> has den = 3.
+    vec : numpy array
+        list of qubits representing state as vector.
+    bin : str
+        binary representation of state as 0b___ e.g. |3> has bin = "0b11"
+    strRep : str
+        string representaiton of the state in dirac notation: |state>.
     """
 
     def __init__(self, values, ket=True):
@@ -90,17 +119,17 @@ class State(QubitState):
         super().__init__(values, ket)
         self.values = values
         self.d = 2**values[1]    #number of qubits
-        self.int = values[0]     #Integer representation of State
+        self.den = values[0]     #Integer representation of State
 
-        if self.int>self.d-1:
+        if self.den>self.d-1:
             raise InputError("State can't be represented with given number of qubits")
 
         #Implement Vector Representation (|0> = [1,0], |3> = [0,0,0,1])
         vr = np.zeros(self.d)
-        vr[self.int] = 1
+        vr[self.den] = 1
         self.vec = np.array(vr)
 
-        bi = bin(self.int)
+        bi = bin(self.den)
         self.bin = np.array([int(n) for n in bi[2:].zfill(values[1])])
 
 
@@ -118,8 +147,3 @@ class State(QubitState):
     def __str__(self):
         """TODO: ensure representation is appropiate"""
         return super().__str__()
-
-
-#-----------------------
-#TESTS
-#-----------------------

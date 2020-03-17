@@ -1,7 +1,3 @@
-"""
-Contains all functions used to implement grover's algorithm
-"""
-
 import operations as op
 import register as re
 import quantum_states as qs
@@ -10,53 +6,128 @@ import matplotlib.pyplot as plt
 import time
 
 def Oracle(nq, s):
-    """ Returns the oracle gate when looking for mode s, with # of qubits nq """
+    """ Function that dynamically creates the oracle gate
+
+    Using deterministic algorithm for mode s, with number of qubits nq,
+    function creates a matrix made up from lower-level gates which serves as
+    the oracle gate when applied to an entangled quantum register.
+
+    Parameters
+    ----------
+    nq : int
+        Number of qubits per state.
+    s : int
+        Denary representation of state the gate is applied to.
+
+    Returns
+    -------
+    numpy array
+        returns an nq-dimensional numpy array which can be applied as an Oracle
+        gate on a quantum register
+
+    """
+    #takes binary representation of state and formats it to construct gate
     Tr = bin(s)[2:].zfill(nq)
-    Neg = ""       #Stores the code for the Left and Rightmost layers (i.e. for |0> we get all 'XX')
+    Neg = ""        #Stores the code for the Left
+                    #and Rightmost layers (i.e. for |0> we get all 'XX')
     for i in Tr:
         if i == '0':
             Neg+="X"
         else:
             Neg+="I"
-    L = op.constructGate(Neg)   #Constructs the matrices representing the leftmost and rightmost operations
-    Z = op.constructGate(f"{nq}Z")  #Constructs the nq-dimansional CNOT gate (middle layer)
+
+    #Constructs the matrices representing the leftmost and rightmost operations
+    L = op.constructGate(Neg)
+    #Constructs the nq-dimansional CNOT gate (middle layer)
+    Z = op.constructGate(f"{nq}Z")
     return np.dot(np.dot(L, Z), L)
 
 
 def Hadamard(nq):
-    """Constructs the Hadamard gate (that is to be applied to all qubits)"""
+    """ Constructs the Hadamard gate (that is to be applied to all qubits)
+
+    Parameters
+    ----------
+    nq : int
+        Number of qubits per state.
+
+    Returns
+    -------
+    numpy array
+        returns an nq-dimensional numpy array which can be applied as a Hadamard
+        gate on a quantum register
+    """
+
     H = op.constructGate('H'*nq)
     return H
 
 
 def Diffuser(nq):
-    """ Returns the Grover's Diffusion operator for # of qubits nq """
+    """ Returns the Grover's Diffusion operator for # of qubits nq
+
+    Parameters
+    ----------
+    nq : int
+        Number of qubits per state.
+
+    Returns
+    -------
+    numpy array
+        returns an nq-dimensional numpy array which can be applied as a Diffuser
+        gate on a quantum register
+    """
+
     L = op.constructGate("X"*nq)   #Constructs the matrices representing the leftmost and rightmost operations
     Z = op.constructGate(f"{nq}Z")  #Constructs the nq-dimansional CNOT gate (middle layer)
     return np.dot(np.dot(L, Z), L)
 
-def Grovers(nq, s, print):
-    if print:
+
+def Grovers(nq, s, cout):
+    """ Actual function running grover's algorithm.
+
+    Capable of adapting gates dynamically depending on the mode and number of
+    qubits selected by user.
+
+    Parameters
+    ----------
+    nq : type
+        Description of parameter `nq`.
+    s : type
+        Denary representation of state.
+
+    Returns
+    -------
+    register.Register, int
+        The custom register object starts as a uniform superposition of States
+        which is then put through Grover's algorithm 'it' times and the heavily
+        weighted (towards target state) register is returned at the end.
+
+        Dt is the time interval that it took to run Grovers 'it' times on
+        register.
+    """
+    if cout:
         print('\n'+"-------Making gates------:")
         print("Making Hadamard")
     H = Hadamard(nq)
-    if print:
+    if cout:
         print("Making Oracle")
     Orac = Oracle(nq, s)
-    if print:
+    if cout:
         print("Making Diffusion Operator" + '\n')
     Diff = Diffuser(nq)
 
     #Initialising Register in a uniform superposition
-    if print:
+    if cout:
         print("-------Initialising Register-------" + '\n')
+    #pass an n-qbit determinate state 0
     R = re.Register(qs.State((0,nq)))
     start_time = time.time()
+    #n-dimensional hadamard creates uniform superposition of states up until state(2**nq)
     R.applyGate(H)
 
-    #Iterating it times
+    #Iterating -it times (most accurate order of iteration, ussually simply quoted as root(n))
     it = int(np.pi/(4*np.arcsin(1/np.sqrt(2**nq))))
-    if print:
+    if cout:
         print('\n'+ f"Running Grover's, {it} times:")
     for i in range(it):
         R.applyGate(Orac)
@@ -68,6 +139,18 @@ def Grovers(nq, s, print):
 
 
 def FrequencyPlot(freq, States):
+    """Plots a graph of each state and how many times it had been selected.
+
+    Times selected is analogous to probability of being the 'correct' target state.
+
+    Parameters
+    ----------
+    freq : list of int
+        Frequencies for which each state was selected.
+    States : list of strings
+        List containing each state in register in dirac notation.
+    """
+
     xaxis = list(range(0,len(States)))
     plt.bar(xaxis,freq, tick_label=States)
     plt.ylabel("occurrences")
@@ -78,15 +161,29 @@ def FrequencyPlot(freq, States):
         plt.annotate(freq[i], xy=(i, freq[i]), ha='center', va='bottom')
     plt.show()
 
-"""
-Observe the system S, n times. This simulates the "Uncertainty" in the outcome of the observation.
-Parameters: Register (R), number of times you want to "run" Grover's (n), number of qubits(nq).
 
-As the state of the system before observing it, is definite, we don't need to run Grover's each time.
-Just simulate the final measurement using the register.measure() method, that implements a Monte-Carlo approach
-for counting how many times each state was observed in a given number of trials.
-"""
 def Observe_System(R, n, nq):
+    """ Observe the register R, n times.
+
+    This simulates the "Uncertainty" in the outcome of the observation.
+
+    As the state of the system before observing it, is definite, we don't need
+    to run Grover's each time. Just simulate the final measurement using
+    the register.measure() method, that implements a Monte-Carlo approach for
+    counting how many times each state was observed in a given number of trials.
+
+    Calls for plot of measurements at the end.
+
+
+    Parameters
+    ----------
+    R : register.Register
+        Custom register object.
+    n : int
+        Number of times to simulate running Grover's for.
+    nq : int
+        Number of quibits used to represent each state.
+    """
 
     Obs = []
     States = [f"|{bin(i)[2:].zfill(nq)}>" for i in range(2**nq)]
@@ -98,7 +195,7 @@ def Observe_System(R, n, nq):
     for s in States:
         freq.append(Obs.count(s))
 
-    print('\n' + f"# of Occurances of each state after measuring the system {n} times:")
+    print('\n' + f"# of Occurences of each state after measuring the system {n} times:")
     for i in range(len(freq)):
         print(f"{States[i]}: {freq[i]}")
 
