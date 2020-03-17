@@ -15,7 +15,17 @@ gates = {
                     [1j,0]]),
     'Z' : np.array([[1,0],
                     [0,-1]])
-                    
+
+}
+
+sgates = {
+
+    'H' : sp.sparse(gates['H']),
+    'I' : sp.sparse(gates['I']),
+    'X' : sp.sparse(gates['X']),
+    'Y' : sp.sparse(gates['Y']),
+    'Z' : sp.sparse(gates['Z'])
+
 }
 
 
@@ -27,14 +37,14 @@ def matrixSum(matA,matB):
 
     Parameters
     ----------
-    matA : numpy array or sp.Sparse
+    matA : numpy array or sp.sparse
         First matrix in sum.
-    matB : numpy array or sp.Sparse
+    matB : numpy array or sp.sparse
         Second matrix in sum.
 
     Returns
     -------
-    numpy array or sp.Sparse
+    numpy array or sp.sparse
         Sum of matA + matB.
     """
 
@@ -47,7 +57,7 @@ def matrixSum(matA,matB):
                 for j in range(matA.shape[1]):
                     matZ[i][j] = matA[i][j]+matB[i][j]
             return matZ
-    elif isinstance(matA, sp.Sparse) & isinstance(matA, sp.Sparse):
+    elif isinstance(matA, sp.sparse) & isinstance(matA, sp.sparse):
         for b in matB.matrixDict:
             if b in matA.matrixDict:
                 matA.matrixDict[b] += matB.matrixDict[b]
@@ -64,14 +74,14 @@ def matrixProduct(matA,matB):
 
     Parameters
     ----------
-    matA : numpy array or sp.Sparse
+    matA : numpy array or sp.sparse
         Leftmost matrix in product.
-    matB : numpy array or sp.Sparse
+    matB : numpy array or sp.sparse
         Rightmost matrix in product.
 
     Returns
     -------
-    numpy array or sp.Sparse
+    numpy array or sp.sparse
         Matrix being a product of (matA x matB).
     """
 
@@ -85,7 +95,7 @@ def matrixProduct(matA,matB):
                     for n in range(matA.shape[1]):
                         matZ[i][j] += matA[i][n]*matB[n][j]
             return matZ
-    elif isinstance(matA, sp.Sparse) & isinstance(matB, sp.Sparse):
+    elif isinstance(matA, sp.sparse) & isinstance(matB, sp.sparse):
         matZ = {}
         for a in matA.matrixDict:
             for b in matB.matrixDict:
@@ -94,7 +104,7 @@ def matrixProduct(matA,matB):
                         matZ[(b[0],a[1])] += matA.matrixDict[a]*matB.matrixDict[b]
                     else:
                         matZ[(b[0],a[1])] = matA.matrixDict[a]*matB.matrixDict[b]
-        return sp.Sparse(matZ)
+        return sp.sparse(matZ, matA.size)
     else:
         print("ERROR : Incorrect type for one or more matrices.")
 
@@ -106,7 +116,7 @@ def matrixDet(mat):
 
     Parameters
     ----------
-    mat : numpy array or sp.Sparse
+    mat : numpy array or sp.sparse
         Square matrix whose dterminant will be found.
 
     Returns
@@ -117,7 +127,7 @@ def matrixDet(mat):
 
     if isinstance(mat, np.ndarray):
         return determinant(mat)
-    elif isinstance(mat, sp.Sparse):
+    elif isinstance(mat, sp.sparse):
         #cons = np.array([ (-1)**((x+1)//2) for x in range(m.factorial(mat.size))])
         return determinant(mat.asMatrix)
     else:
@@ -150,19 +160,19 @@ def matrixInv(mat):
 
     Parameters
     ----------
-    mat : numpy array or sp.Sparse
+    mat : numpy array or sp.sparse
         Matrix whose inverse will be found.
 
     Returns
     -------
-    numpy array or sp.Sparse
+    numpy array or sp.sparse
         Inverted matrix whose operation reverses that of mat.
     """
     if isinstance(mat, np.ndarray):
         return inverter(mat[0])
-    elif isinstance(mat, sp.Sparse):
+    elif isinstance(mat, sp.sparse):
         #cons = np.array([ (-1)**((x+1)//2) for x in range(m.factorial(mat.size))])
-        return sp.Sparse(inverter(mat.asMatrix))
+        return sp.sparse(inverter(mat.asMatrix))
     else:
         print("ERROR : Incorrect type for matrix.")
 
@@ -216,14 +226,14 @@ def kroneckerProduct(matA,matB):
 
     Parameters
     ----------
-    matA : numpy array or sp.Sparse
+    matA : numpy array or sp.sparse
         Leftmost matrix in kronecker product.
-    matB : numpy array or sp.Sparse
+    matB : numpy array or sp.sparse
         Rightmost array in product.
 
     Returns
     -------
-    numpy array or sp.Sparse
+    numpy array or sp.sparse
         Kronecker product of matA (x) matB.
     """
     if isinstance(matA, np.ndarray) & isinstance(matB, np.ndarray):
@@ -232,12 +242,12 @@ def kroneckerProduct(matA,matB):
             for j in range(matZ.shape[1]):
                 matZ[i][j] = matA[i//matB.shape[0]][j//matB.shape[1]]*matB[i%matB.shape[0]][j%matB.shape[1]]
         return matZ
-    elif isinstance(matA, sp.Sparse) & isinstance(matB, sp.Sparse):
+    elif isinstance(matA, sp.sparse) & isinstance(matB, sp.sparse):
         matZ = {}
         for a in matA.matrixDict:
             for b in matB.matrixDict:
                 matZ[( b[0]+a[0]*matB.size , b[1]+a[1]*matB.size )] = matA.matrixDict[a]*matB.matrixDict[b]
-        return sp.Sparse(matZ, matA.size*matB.size)
+        return sp.sparse(matZ, matA.size*matB.size)
 
 
 ### Helper Functions ----------------------------------------------------------------------------------------------------
@@ -246,26 +256,26 @@ def vecMatProduct(mat,vec):
 
     Parameters
     ----------
-    mat : numpy array or sp.Sparse
+    mat : numpy array or sp.sparse
         2D Matrix.
-    vec : numpy array or sp.Sparse
+    vec : numpy array or sp.sparse
         1D Vector.
 
     Returns
     -------
-    numpy array or sp.Sparse
+    numpy array or sp.sparse
         Formatted product.
     """
     if isinstance(mat, np.ndarray) & isinstance(vec, np.ndarray):
         vecR = np.resize(vec,(len(vec),1))
         return matrixProduct(mat,vecR)[:,0]
-    elif isinstance(mat, sp.Sparse) & isinstance(vec, sp.Sparse):           # Not entirely sure if this works.
+    elif isinstance(mat, sp.sparse) & isinstance(vec, sp.sparse):           # Not entirely sure if this works.
         return matrixProduct(mat,vecR)
     else:
         print("ERROR : Incorrect type for matrix and/or vector.")
 
 
-def constructGate(code):
+def constructGate(code, sparse = False):
     """ Function constructing matrix representing gate dynamically
 
     Works by parsing a carefully formatted string representing the gate
@@ -284,32 +294,42 @@ def constructGate(code):
     """
 
     matrix = np.array([[1]])
+    if sparse:
+        matrix = sp.sparse(matrix)
     TofN = 0
     for char in code:
         if char.isdigit():
             TofN = int(char)
         elif TofN != 0:
             Tof = np.identity(2**TofN)
-            gate = gates[char]
-            for x in range(len(gates)):
-                for y in range(len(gates)):
-                    Tof[len(Tof)-len(gate)+x%len(gate)][len(Tof)-len(gate)+y%len(gate)] = gate[x%len(gate)][y%len(gate)]
+            if sparse:
+                gate = sgates[char]
+                Tof = sp.sparse(Tof)
+                for x in range(len(gates)):
+                    for y in range(len(gates)):
+                        Tof[(len(Tof)-len(gate)+x%len(gate) , len(Tof)-len(gate)+y%len(gate))] = sgate[(x%len(gate),y%len(gate))
+            else:
+                gate = gates[char]
+                for x in range(len(gates)):
+                    for y in range(len(gates)):
+                        Tof[len(Tof)-len(gate)+x%len(gate)][len(Tof)-len(gate)+y%len(gate)] = gate[x%len(gate)][y%len(gate)]
             matrix = kroneckerProduct(matrix,Tof)
             TofN = 0
         else:
-            matrix = kroneckerProduct(matrix,gates[char])
+            if sparse:
+                matrix = kroneckerProduct(matrix,sgates[char])
+            else:
+                matrix = kroneckerProduct(matrix,gates[char])
     return matrix
 
 
-a = np.identity(50)
-b = np.identity(50)
+
 #print(b)
-sa = sp.Sparse(a)
-sb = sp.Sparse(b)
+
 t0 = time()
-asdf = matrixProduct(a,b)
+#X = constructGate('HHHHHHHHHHH')
 t1 = time()
-asfd = matrixProduct(sa,sb)
+X = constructGate('HHHHHHHHHHH', sparse = True)
 t2 = time()
 
 print(f"Original in {t1-t0} secs:\nNew in {t2-t1} secs:\n")
