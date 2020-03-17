@@ -10,7 +10,7 @@ class Register():
     """ Class to represent the System (Register) at any point in time
 
     Receives a pure state as its input (can only be initialised as a pure state, as in real life)
-    Main representation is the list self.signVector where all the coefficients for the modes are stored.
+    Main representation is the list self.signVector where all the coefficients for each state are stored.
 
     Parameters
     ----------
@@ -30,7 +30,7 @@ class Register():
     applyGate(self, gate)
         operates matrix "gate" on the Register
     measure(self)
-        collapses register into most probable state
+        collapses register randonly, depending on the amplitude of the states
     __str__(self)
         string representation of state: |s> = -0.2|0> + 0.9|1>
 
