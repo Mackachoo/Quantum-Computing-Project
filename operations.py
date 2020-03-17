@@ -94,7 +94,7 @@ def matrixProduct(matA,matB):
                         matZ[(b[0],a[1])] += matA.matrixDict[a]*matB.matrixDict[b]
                     else:
                         matZ[(b[0],a[1])] = matA.matrixDict[a]*matB.matrixDict[b]
-        return sp.sparse(matZ)
+        return sp.sparse(matZ, matA.size)
     else:
         print("ERROR : Incorrect type for one or more matrices.")
 
@@ -265,7 +265,7 @@ def vecMatProduct(mat,vec):
         print("ERROR : Incorrect type for matrix and/or vector.")
 
 
-def constructGate(code):
+def constructGate(code, sparse = False):
     """ Function constructing matrix representing gate dynamically
 
     Works by parsing a carefully formatted string representing the gate
@@ -284,6 +284,8 @@ def constructGate(code):
     """
 
     matrix = np.array([[1]])
+    if sparse:
+        matrix = sp.sparse(matrix)
     TofN = 0
     for char in code:
         if char.isdigit():
@@ -297,12 +299,14 @@ def constructGate(code):
             matrix = kroneckerProduct(matrix,Tof)
             TofN = 0
         else:
-            matrix = kroneckerProduct(matrix,gates[char])
+            if sparse:
+                matrix = kroneckerProduct(matrix,sgates[char])
+            else:
+                matrix = kroneckerProduct(matrix,gates[char])
     return matrix
 
 
 """
-test
 a = np.identity(50)
 b = np.random.rand(50,50)
 #print(b)
