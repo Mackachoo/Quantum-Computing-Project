@@ -269,12 +269,11 @@ def vecMatProduct(mat,vec):
     if isinstance(mat, np.ndarray):
         vecR = np.resize(vec,(len(vec),1))
         return matrixProduct(mat,vecR)[:,0]
-    elif isinstance(mat, sp.Sparse):           # Not entirely sure if this works.
-        V = [0]*len(vec)
-        for i in range(len(vec)):
-            for j in range(len(vec)):
-                V[i] += mat.matrixDict[(i,j)]*vec[i]
-        return np.array(V)
+    elif isinstance(mat, sp.Sparse):
+        V = np.array([0]*len(vec))
+        for pos in mat.matrixDict:
+            V[pos[0]] += mat.matrixDict[pos]*vec[pos[1]]
+        return V
     else:
         print("ERROR 6 : Incorrect type for matrix and/or vector.")
 

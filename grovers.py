@@ -200,3 +200,14 @@ def Observe_System(R, n, nq):
         print(f"{States[i]}: {freq[i]}")
 
     FrequencyPlot(freq, States)
+
+
+
+"""
+nq = 4
+print(f"{Hadamard(nq,False)}\n\n{Hadamard(nq,True)}")
+print("\n------------\n")
+print(f"{Oracle(nq,False)}\n\n{Oracle(nq,True)}")
+print("\n------------\n")
+print(f"{Diffuser(nq,False)}\n\n{Diffuser(nq,True)}")
+"""
