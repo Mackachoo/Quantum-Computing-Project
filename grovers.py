@@ -138,16 +138,16 @@ def Grovers(nq, s, cOut, Sparse = False):
 
 
 def FrequencyPlot(freq, States):
-    """Plots a graph of each state and how many times it had been selected.
+    """Plots a graph of each state and how many times it was observed.
 
     Times selected is analogous to probability of being the 'correct' target state.
 
     Parameters
     ----------
     freq : list of int
-        Frequencies for which each state was selected.
+        Number of occurances for each state.
     States : list of strings
-        List containing each state in register in dirac notation.
+        List containing each possible state, in dirac notation.
     """
 
     xaxis = list(range(0,len(States)))
@@ -168,8 +168,8 @@ def Observe_System(R, n, nq):
 
     As the state of the system before observing it, is definite, we don't need
     to run Grover's each time. Just simulate the final measurement using
-    the register.measure() method, that implements a Monte-Carlo approach for
-    counting how many times each state was observed in a given number of trials.
+    the register.measure() method, that implements a Monte-Carlo approach to choose
+    which state the system is going to collapse to when measuring it.
 
     Calls for plot of measurements at the end.
 
@@ -179,7 +179,8 @@ def Observe_System(R, n, nq):
     R : register.Register
         Custom register object.
     n : int
-        Number of times to simulate running Grover's for.
+        Number of times Grover's was "ran". Grover's doesn't actually have to be ran
+        n times, as the final amplitudes are definite. 
     nq : int
         Number of quibits used to represent each state.
     """
