@@ -81,7 +81,7 @@ def Diffuser(nq, Sparse = False):
     return op.matrixProduct(op.matrixProduct(L, Z), L)
 
 
-def Grovers(nq, s, cout, Sparse = False):
+def Grovers(nq, s, cOut, Sparse = False):
     """ Actual function running grover's algorithm.
 
     Capable of adapting gates dynamically depending on the mode and number of
@@ -104,19 +104,19 @@ def Grovers(nq, s, cout, Sparse = False):
         Dt is the time interval that it took to run Grovers 'it' times on
         register.
     """
-    if cout:
+    if cOut:
         print('\n'+"-------Making gates------:")
         print("Making Hadamard")
     H = Hadamard(nq, Sparse)
-    if cout:
+    if cOut:
         print("Making Oracle")
     Orac = Oracle(nq, s, Sparse)
-    if cout:
+    if cOut:
         print("Making Diffusion Operator" + '\n')
     Diff = Diffuser(nq, Sparse)
 
     #Initialising Register in a uniform superposition
-    if cout:
+    if cOut:
         print("-------Initialising Register-------" + '\n')
     #pass an n-qbit determinate state 0
     R = re.Register(qs.State((0,nq)))
@@ -126,7 +126,7 @@ def Grovers(nq, s, cout, Sparse = False):
 
     #Iterating -it times (most accurate order of iteration, ussually simply quoted as root(n))
     it = int(np.pi/(4*np.arcsin(1/np.sqrt(2**nq))))
-    if cout:
+    if cOut:
         print('\n'+ f"Running Grover's, {it} times:")
     for i in range(it):
         R.applyGate(Orac)
