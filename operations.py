@@ -302,6 +302,7 @@ def constructGate(code):
 
 
 """
+test
 a = np.identity(50)
 b = np.random.rand(50,50)
 #print(b)
