@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 
-def Oracle(nq, s, Sparse = "False"):
+def Oracle(nq, s, Sparse = False):
     """ Function that dynamically creates the oracle gate
 
     Using deterministic algorithm for mode s, with number of qubits nq,
@@ -43,7 +43,7 @@ def Oracle(nq, s, Sparse = "False"):
     return op.matrixProduct(op.matrixProduct(L, Z), L)
 
 
-def Hadamard(nq, Sparse = "False"):
+def Hadamard(nq, Sparse = False):
     """ Constructs the Hadamard gate (that is to be applied to all qubits)
 
     Parameters
