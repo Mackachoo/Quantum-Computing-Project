@@ -62,11 +62,6 @@ class QubitState(ABC):
         self.ket = False
 
     @abstractmethod
-    def dotWith(self, ket):
-        """ TODO: Implement dot product with another ket"""
-        pass
-
-    @abstractmethod
     def __str__(self):
         """TODO: ensure representation is appropiate"""
 
@@ -139,10 +134,6 @@ class State(QubitState):
     def flip(self):
         """ TODO: Flip the ket to a bra."""
         self.ket = False
-
-    def dotWith(self, ket):
-        """ TODO: Implement dot product with another ket"""
-        pass
 
     def __str__(self):
         """TODO: ensure representation is appropiate"""

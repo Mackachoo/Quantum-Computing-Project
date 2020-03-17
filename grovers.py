@@ -62,7 +62,7 @@ def Hadamard(nq, Sparse = "False"):
     return H
 
 
-def Diffuser(nq):
+def Diffuser(nq, Sparse = False):
     """ Returns the Grover's Diffusion operator for # of qubits nq
 
     Parameters
@@ -76,13 +76,12 @@ def Diffuser(nq):
         returns an nq-dimensional numpy array which can be applied as a Diffuser
         gate on a quantum register
     """
+    L = op.constructGate("X"*nq, Sparse)   #Constructs the matrices representing the leftmost and rightmost operations
+    Z = op.constructGate(f"{nq}Z", Sparse)  #Constructs the nq-dimansional CNOT gate (middle layer)
+    return op.matrixProduct(op.matrixProduct(L, Z), L)
 
-    L = op.constructGate("X"*nq)   #Constructs the matrices representing the leftmost and rightmost operations
-    Z = op.constructGate(f"{nq}Z")  #Constructs the nq-dimansional CNOT gate (middle layer)
-    return np.dot(np.dot(L, Z), L)
 
-
-def Grovers(nq, s, cout):
+def Grovers(nq, s, cout, Sparse = False):
     """ Actual function running grover's algorithm.
 
     Capable of adapting gates dynamically depending on the mode and number of
@@ -108,13 +107,13 @@ def Grovers(nq, s, cout):
     if cout:
         print('\n'+"-------Making gates------:")
         print("Making Hadamard")
-    H = Hadamard(nq)
+    H = Hadamard(nq, Sparse)
     if cout:
         print("Making Oracle")
-    Orac = Oracle(nq, s)
+    Orac = Oracle(nq, s, Sparse)
     if cout:
         print("Making Diffusion Operator" + '\n')
-    Diff = Diffuser(nq)
+    Diff = Diffuser(nq, Sparse)
 
     #Initialising Register in a uniform superposition
     if cout:
