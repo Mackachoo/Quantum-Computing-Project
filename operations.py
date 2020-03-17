@@ -299,7 +299,7 @@ def constructGate(code, Sparse = False):
     TofN = 0
     for char in code:
         if char.isdigit():
-            TofN = int(char)
+            TofN = int(str(TofN)+char)
         elif TofN != 0:
             if Sparse:
                 gate = sgates[char]
