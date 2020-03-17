@@ -128,13 +128,11 @@ def Grovers(nq, s, cOut, Sparse = False):
     it = int(np.pi/(4*np.arcsin(1/np.sqrt(2**nq))))
     if cOut:
         print('\n'+ f"Running Grover's, {it} times:")
-    print(R)
     for i in range(it):
         R.applyGate(Orac, Sparse)
         R.applyGate(H, Sparse)
         R.applyGate(Diff, Sparse)
         R.applyGate(H, Sparse)
-        print(R)
     Dt = time.time() - start_time
     return R, Dt
 
@@ -203,9 +201,13 @@ def Observe_System(R, n, nq):
 
     FrequencyPlot(freq, States)
 
+
+
+"""
 nq = 4
 print(f"{Hadamard(nq,False)}\n\n{Hadamard(nq,True)}")
 print("\n------------\n")
 print(f"{Oracle(nq,False)}\n\n{Oracle(nq,True)}")
 print("\n------------\n")
 print(f"{Diffuser(nq,False)}\n\n{Diffuser(nq,True)}")
+"""

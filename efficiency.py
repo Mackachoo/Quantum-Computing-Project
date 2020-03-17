@@ -20,8 +20,9 @@ def check_efficiency(f):
     """
     s = 1
     Dt = []
+    DtS = []
     T = []
-    nq = np.arange(9)+1
+    nq = np.arange(7)+1
     print(nq)
 
     wr = open("Time_vs_N.txt","w")
@@ -34,12 +35,19 @@ def check_efficiency(f):
         R, t = f(n,s,False)
         T.append(t)
         Dt.append( time.time() - start_time)
+
+        start_time = time.time()
+        R, t = f(n,s,False,True)
+        T.append(t)
+        DtS.append( time.time() - start_time)
         wr.write("%f %10.10f\n" % (t, time.time() - start_time))
 
     nq = 2**nq
     wr.close()
-    plt.plot(nq, Dt)
-    plt.plot(nq, T)
+    plt.plot(nq, Dt, label="Not Sparse")
+    plt.plot(nq, DtS, label="Sparse")
+    #plt.plot(nq, T)
+    plt.legend()
     plt.yscale('log')
     plt.show()
 
