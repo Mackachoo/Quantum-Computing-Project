@@ -332,7 +332,7 @@ v = np.array([1,0,0,0])
 t0 = time()
 V1 = np.dot(X, v)
 t1 = time()
-V2 = vecMatProduct(X, v)
+V2 = vecMatProduct(sX, v)
 t2 = time()
 
 print(f"dot in {t1-t0} secs:\nsparse in {t2-t1} secs:\n")
