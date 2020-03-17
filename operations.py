@@ -306,7 +306,6 @@ def constructGate(code, Sparse = False):
                 Tof = sp.Sparse(np.identity(2**TofN-gate.size))
                 Tof.size += gate.size
                 for pos in gate.matrixDict:
-                    print(pos)
                     Tof.matrixDict[((Tof.size)-(gate.size)+pos[0]%(gate.size) , (Tof.size)-(gate.size)+pos[1]%(gate.size))] = gate.matrixDict[(pos[0]%(gate.size),pos[1]%(gate.size))]
             else:
                 Tof = np.identity(2**TofN)
@@ -326,12 +325,12 @@ def constructGate(code, Sparse = False):
 
 """
 t0 = time()
-X = constructGate('3H')
+X = constructGate('10Z')
 t1 = time()
-sX = constructGate('3H', Sparse = True)
+sX = constructGate('10Z', Sparse = True)
 t2 = time()
 
 print(f"Original in {t1-t0} secs:\nNew in {t2-t1} secs:\n")
 print(f"{t0} -> {t1} -> {t2}")
-print(f"{X}\n{sX}")
+print(f"{X}\n{sX.size}")
 """
