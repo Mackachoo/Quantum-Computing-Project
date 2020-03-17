@@ -14,24 +14,27 @@ Assume all matrices considered are square
                 for y in range(len(m[0])):
                     if m[x][y] != 0:
                         self.matrixDict[(x,y)] = m[x][y]
-            self.len = len(self.matrixDict)
-            self.size = (len(m),len(m[0]))
-        if isinstance(m, dict):
+        elif isinstance(m, dict):
             self.matrixDict = m
-            self.len = len(self.matrixDict)
-            if s != None:
-                self.size = s
-            else:                    # Guesses the matrix size if none given.
-                self.size = (0,0)
-                for pos in m:
-                    #print(self.size)
-                    #print(pos)
-                    if pos[0] > self.size[0]:
-                        self.size[0] = pos[0]
-                    if pos[1] > self.size[1]:
-                        self.size[1] = pos[1]
-                self.size[0] += 1
-                self.size[1] += 1
+        else:
+            print("ERROR 7 : Not Dictionary or Matrix.")
+
+        self.len = len(self.matrixDict)
+        if s != None:
+            self.size = s
+        elif isinstance(m, np.ndarray):
+            self.size = (len(m),len(m[0]))
+        else:                    # Guesses the matrix size if none given.
+            self.size = (0,0)
+            for pos in m:
+                #print(self.size)
+                #print(pos)
+                if pos[0] > self.size[0]:
+                    self.size[0] = pos[0]
+                if pos[1] > self.size[1]:
+                    self.size[1] = pos[1]
+            self.size[0] += 1
+            self.size[1] += 1
 
 
     def asMatrix(self):

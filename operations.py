@@ -328,13 +328,12 @@ def constructGate(code, Sparse = False):
 
 """
 t0 = time()
-X = constructGate('2Z')
-print(X)
+X = constructGate('4Z')
 t1 = time()
-sX = constructGate('2Z', Sparse = True)
-print(sX)
+sX = constructGate('4Z', Sparse = True)
 t2 = time()
 
-print(f"Original in {t1-t0} secs:\nNew in {t2-t1} secs:\n")
-print(f"{t0} -> {t1} -> {t2}")
+#print(f"Original in {t1-t0} secs:\nNew in {t2-t1} secs:\n")
+#print(f"{t0} -> {t1} -> {t2}")
+#print(f"{len(X)}\n{sX.size}")
 """
