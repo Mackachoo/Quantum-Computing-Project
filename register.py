@@ -116,11 +116,3 @@ class Register():
             else:
                 output += f" {round(self.signVector[i],5)}{self.qbitVector[i]}"
         return output
-
-# Testing # --------------------------------------------------------------------
-
-#test = Register(qs.Register((0,2)))
-#test.applyGate("HH")
-#print()
-#print(test)
-#print()
