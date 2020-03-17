@@ -20,11 +20,11 @@ gates = {
 
 sgates = {
 
-    'H' : sp.sparse(gates['H']),
-    'I' : sp.sparse(gates['I']),
-    'X' : sp.sparse(gates['X']),
-    'Y' : sp.sparse(gates['Y']),
-    'Z' : sp.sparse(gates['Z'])
+    'H' : sp.Sparse(gates['H']),
+    'I' : sp.Sparse(gates['I']),
+    'X' : sp.Sparse(gates['X']),
+    'Y' : sp.Sparse(gates['Y']),
+    'Z' : sp.Sparse(gates['Z'])
 
 }
 
@@ -104,7 +104,7 @@ def matrixProduct(matA,matB):
                         matZ[(b[0],a[1])] += matA.matrixDict[a]*matB.matrixDict[b]
                     else:
                         matZ[(b[0],a[1])] = matA.matrixDict[a]*matB.matrixDict[b]
-        return sp.sparse(matZ, matA.size)
+        return sp.Sparse(matZ, matA.size)
     else:
         print("ERROR : Incorrect type for one or more matrices.")
 
@@ -275,7 +275,7 @@ def vecMatProduct(mat,vec):
         print("ERROR : Incorrect type for matrix and/or vector.")
 
 
-def constructGate(code, sparse = False):
+def constructGate(code, Sparse = False):
     """ Function constructing matrix representing gate dynamically
 
     Works by parsing a carefully formatted string representing the gate
@@ -294,16 +294,16 @@ def constructGate(code, sparse = False):
     """
 
     matrix = np.array([[1]])
-    if sparse:
-        matrix = sp.sparse(matrix)
+    if Sparse:
+        matrix = sp.Sparse(matrix)
     TofN = 0
     for char in code:
         if char.isdigit():
             TofN = int(char)
         elif TofN != 0:
-            if sparse:
+            if Sparse:
                 gate = sgates[char]
-                Tof = sp.sparse(np.identity(2**TofN-gate.size))
+                Tof = sp.Sparse(np.identity(2**TofN-gate.size))
                 Tof.size += gate.size
                 for pos in gate.matrixDict:
                     print(pos)
@@ -317,7 +317,7 @@ def constructGate(code, sparse = False):
             matrix = kroneckerProduct(matrix,Tof)
             TofN = 0
         else:
-            if sparse:
+            if Sparse:
                 matrix = kroneckerProduct(matrix,sgates[char])
             else:
                 matrix = kroneckerProduct(matrix,gates[char])
@@ -328,7 +328,7 @@ def constructGate(code, sparse = False):
 t0 = time()
 X = constructGate('3H')
 t1 = time()
-sX = constructGate('3H', sparse = True)
+sX = constructGate('3H', Sparse = True)
 t2 = time()
 
 print(f"Original in {t1-t0} secs:\nNew in {t2-t1} secs:\n")
