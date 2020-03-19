@@ -1,6 +1,6 @@
 import grovers as gr
 
-n = 1000
+n = 50000
 
 s = int(input('\n' + "which state are you looking for?: "))
 nq = int(input("number of qubits: "))
@@ -9,4 +9,5 @@ nq = int(input("number of qubits: "))
 R, Dt = gr.Grovers(nq, s, True, True)
 
 #Simulate the measurement of the System, AS IF you run Grover's each time
-gr.Observe_System(R, n, nq)
+success_rate = gr.Observe_System(R, n, nq)/n
+print(f"success rate = {success_rate}")

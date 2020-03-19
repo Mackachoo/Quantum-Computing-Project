@@ -200,6 +200,7 @@ def Observe_System(R, n, nq):
         print(f"{States[i]}: {freq[i]}")
     if nq <= 4:
         FrequencyPlot(freq, States)
+    return (max(freq))
 
 
 
