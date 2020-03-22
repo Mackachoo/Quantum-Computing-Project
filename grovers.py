@@ -198,7 +198,7 @@ def Observe_System(R, n, nq):
     print('\n' + f"# of Occurences of each state after measuring the system {n} times:")
     for i in range(len(freq)):
         print(f"{States[i]}: {freq[i]}")
-    if nq <= 4:
+    if nq <= 5:
         FrequencyPlot(freq, States)
     return (max(freq))
 

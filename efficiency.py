@@ -22,7 +22,7 @@ def check_efficiency(f):
     Dt = []
     DtS = []
     T = []
-    nq = np.arange(7)+1
+    nq = np.arange(9)+1
     print(nq)
 
     wr = open("Time_vs_N.txt","w")
