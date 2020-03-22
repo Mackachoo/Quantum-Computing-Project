@@ -1,13 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Qubits interface for quantum computing.
-
-Todo:
-* Finish interface implementation.
-* Finish method implementation.
-* Design tests for custom qubit data type.
-* Update docstrings.
+""" Qubits interface for quantum computing.
 """
 
 from abc import ABC, abstractmethod
@@ -49,7 +43,7 @@ class QubitState(ABC):
 
     @abstractmethod
     def __init__(self, values, ket=True):
-        """ TODO: override me in either binary or denary representation """
+        """ Override me in either binary or denary representation """
 
         self.vals = values
         self.ket = ket
@@ -58,12 +52,12 @@ class QubitState(ABC):
 
     @abstractmethod
     def flip(self):
-        """ TODO: Flip the ket to a bra"""
+        """ Flip the ket to a bra"""
         self.ket = False
 
     @abstractmethod
     def __str__(self):
-        """TODO: ensure representation is appropiate"""
+        """ Ensure representation is appropiate"""
 
         if self.ket == True:
             return(f"|{self.strRep}>")
@@ -132,9 +126,9 @@ class State(QubitState):
             self.strRep += str(val)
 
     def flip(self):
-        """ TODO: Flip the ket to a bra."""
+        """ Flip the ket to a bra."""
         self.ket = False
 
     def __str__(self):
-        """TODO: ensure representation is appropiate"""
+        """ Ensure representation is appropiate"""
         return super().__str__()
