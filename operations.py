@@ -65,7 +65,7 @@ def matrixSum(matA,matB):
         return matA
     else:
         raise TypeError("Incorrect type for one or more matrices in sum: \
-        numpy array or custom sparse matrix please"")
+        numpy array or custom sparse matrix please")
 
 ### Matrix multiplication!   -------------------------------------------------------------------------------------------
 
@@ -107,7 +107,7 @@ def matrixProduct(matA,matB):
         return sp.Sparse(matZ, (matA.size[0],matB.size[1]))
     else:
         raise TypeError("Incorrect type for one or more matrices in product: \
-        numpy array or custom sparse matrix please"")
+        numpy array or custom sparse matrix please")
 
 ### Determinant of Matrix!   -------------------------------------------------------------------------------------------
 
