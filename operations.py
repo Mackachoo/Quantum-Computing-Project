@@ -64,7 +64,8 @@ def matrixSum(matA,matB):
                 matA.matrixDict[b] = matB.matrixDict[b]
         return matA
     else:
-        print("ERROR 0 : Incorrect type for one or more matrices.")
+        raise TypeError("Incorrect type for one or more matrices in sum: \
+        numpy array or custom sparse matrix please")
 
 ### Matrix multiplication!   -------------------------------------------------------------------------------------------
 
@@ -105,8 +106,8 @@ def matrixProduct(matA,matB):
                         matZ[(b[0],a[1])] = matA.matrixDict[a]*matB.matrixDict[b]
         return sp.Sparse(matZ, (matA.size[0],matB.size[1]))
     else:
-        print("ERROR 1 : Incorrect type for one or more matrices.")
-
+        raise TypeError("Incorrect type for one or more matrices in product: \
+        numpy array or custom sparse matrix please")
 
 ### Determinant of Matrix!   -------------------------------------------------------------------------------------------
 
@@ -130,7 +131,8 @@ def matrixDet(mat):
         #cons = np.array([ (-1)**((x+1)//2) for x in range(m.factorial(mat.size))])
         return determinant(mat.asMatrix)
     else:
-        print("ERROR 2 : Incorrect type for matrix.")
+        raise TypeError("Incorrect type for matrix to calculate determinant: \
+        numpy array or custom sparse matrix please")
 
 def determinant(mat):
     if mat.shape[0] != mat.shape[1]:
@@ -172,12 +174,13 @@ def matrixInv(mat):
         #cons = np.array([ (-1)**((x+1)//2) for x in range(m.factorial(mat.size))])
         return sp.Sparse(inverter(mat.asMatrix))
     else:
-        print("ERROR 3 : Incorrect type for matrix.")
+        raise TypeError("Incorrect type for matrix to invert: \
+        numpy array or custom sparse matrix please")
 
 
 def inverter(mat):
     if mat.shape[0] != mat.shape[1]:
-        print("ERROR 4 : Non NxN matrices")
+        raise MatrixError("Matrix is not square. Please use NxN matrices for inversion")
     else:
         det = matrixDet(mat)
         matZ = np.zeros(mat.shape)
@@ -247,11 +250,12 @@ def kroneckerProduct(matA,matB):
                 matZ[( b[0]+a[0]*matB.size[0] , b[1]+a[1]*matB.size[1] )] = matA.matrixDict[a]*matB.matrixDict[b]
         return sp.Sparse(matZ, (matA.size[0]*matB.size[0],matA.size[1]*matB.size[1]))
     else:
-        print("ERROR 5 : Incorrect type for one or more matrices.")
+        raise TypeError("Incorrect type for matries in kronecker product: \
+        numpy array or custom sparse matrix please")
 
 ### Helper Functions ----------------------------------------------------------------------------------------------------
 def vecMatProduct(mat,vec):
-    """ TODO: takes a matrix and a single array vector and formats them for the matrixProduct() function.
+    """ Takes a matrix and a single array vector and formats them for the matrixProduct() function.
 
     Parameters
     ----------
@@ -274,7 +278,8 @@ def vecMatProduct(mat,vec):
             V[pos[0]] += mat.matrixDict[pos]*vec[pos[1]]
         return np.array(V)
     else:
-        print("ERROR 6 : Incorrect type for matrix and/or vector.")
+        raise TypeError("Incorrect type for matrix/vector to format together: \
+        numpy array or custom sparse matrix please")
 
 
 def constructGate(code, Sparse = False):
@@ -308,13 +313,16 @@ def constructGate(code, Sparse = False):
                 l = 2**TofN-gate.size[0]
                 Tof = sp.Sparse(np.identity(l), (l+gate.size[0],l+gate.size[0]))
                 for pos in gate.matrixDict:
-                    Tof.matrixDict[((Tof.size[0])-(gate.size[0])+pos[0]%(gate.size[0]) , (Tof.size[1])-(gate.size[1])+pos[1]%(gate.size[1]))] = gate.matrixDict[(pos[0]%(gate.size[0]),pos[1]%(gate.size[1]))]
+                    Tof.matrixDict[((Tof.size[0])-(gate.size[0])+pos[0]%(gate.size[0]) \
+                     , (Tof.size[1])-(gate.size[1])+pos[1]%(gate.size[1]))] \
+                      = gate.matrixDict[(pos[0]%(gate.size[0]),pos[1]%(gate.size[1]))]
             else:
                 Tof = np.identity(2**TofN)
                 gate = gates[char]
                 for x in range(len(gates)):
                     for y in range(len(gates)):
-                        Tof[len(Tof)-len(gate)+x%len(gate)][len(Tof)-len(gate)+y%len(gate)] = gate[x%len(gate)][y%len(gate)]
+                        Tof[len(Tof)-len(gate)+x%len(gate)][len(Tof)-len(gate) \
+                        +y%len(gate)] = gate[x%len(gate)][y%len(gate)]
             matrix = kroneckerProduct(matrix,Tof)
             TofN = 0
         else:
@@ -323,19 +331,3 @@ def constructGate(code, Sparse = False):
             else:
                 matrix = kroneckerProduct(matrix,gates[char])
     return matrix
-
-
-"""
-X = constructGate('2Z')
-sX = constructGate('2Z', Sparse = True)
-v = np.array([1,0,0,0])
-
-t0 = time()
-V1 = np.dot(X, v)
-t1 = time()
-V2 = vecMatProduct(sX, v)
-t2 = time()
-
-print(f"dot in {t1-t0} secs:\nsparse in {t2-t1} secs:\n")
-print(f"{V1}\n{V2}")
-"""

@@ -96,18 +96,7 @@ class Register():
         -------
         str
             representation of register as superposition of states.
-
-        TODO: allow hadamard class to be printed nicely.
-        Representation :
-            H = (1/√2ⁿ)*Σ registers[i]
-              = fⁿ(stateVector ᛫ qbitVector)
-                where (1/√2ⁿ) is the normalisation factor fⁿ.
         """
-#        power = m.log2(len(self.stateVector))
-#        sqrt2 = ""
-#        if power%2 == 1:
-#            sqrt2 = "√2"
-#        output = f"1/{int(2**(power//2))}{sqrt2}("
         output = ""
         for i in range(self.qR.d):
             if self.stateVector[i] >= 0:
