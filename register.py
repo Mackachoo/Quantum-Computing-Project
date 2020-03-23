@@ -30,7 +30,9 @@ class Register():
     applyGate(self, gate)
         operates matrix "gate" on the Register
     measure(self)
-        collapses register randonly, depending on the amplitude of the states
+        returns a basis state of the register randonly, depending on the amplitude of the basis states
+    measure_collapse(self)
+        collapses the register to a basis state (which it returns), depending on the amplitude of the basis states
     __str__(self)
         string representation of state: |s> = -0.2|0> + 0.9|1>
 
@@ -71,13 +73,12 @@ class Register():
         self.stateVector = op.vecMatProduct(gate, self.stateVector)
 
     def measure(self):
-        """Colapses the System into one basis state depending on amplitudes of
-           each basis state
+        """returns a basis state of the register randonly, depending on amplitudes in stateVector
 
         Returns
         -------
         f-string
-            the string representation of the selected state.
+            the string representation of the selected basis state.
         """
 
         ## "Uncertainty" is simulated using a Monte-Carlo like approach.
@@ -88,6 +89,26 @@ class Register():
             sum += amp.real**2 + amp.imag**2  #find the probability of it occuring and add it to sum
             if r <= sum: #if r is in the interval (sum, sum+prob(state)) then "colapse" system to state
                 return (f"{self.qbitVector[i]}")
+
+    def measure_collapse(self):
+        """Colapses the System into one basis state depending on amplitudes in stateVector
+
+        Returns
+        -------
+        f-string
+            the string representation of the selected basis state.
+        """
+        ## "Uncertainty" is simulated using a Monte-Carlo like approach.
+        r = rnd() #random number, uniform probability from 0 to 1
+        sum = 0
+        for i in range(self.qR.d):  # for i in range (number of states)
+            amp = self.stateVector[i] #get the amplitude of the state
+            sum += amp.real**2 + amp.imag**2  #find the probability of it occuring and add it to sum
+            if r <= sum: #if r is in the interval (sum, sum+prob(state)) then "colapse" system to state
+                self.stateVector = np.zeros(self.qR.d)
+                self.stateVector[i] = 1
+                return (f"{self.qbitVector[i]}")
+
 
     def __str__(self):
         """String representation of full register
