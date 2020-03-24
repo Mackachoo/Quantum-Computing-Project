@@ -17,7 +17,7 @@ Assume all matrices considered are square
         elif isinstance(m, dict):
             self.matrixDict = m
         else:
-            raise TypeError("To create sparse matrix need numpy array or dictionary please")
+            raise TypeError("To create sparse matrix need numpy array or dictionary please") #Pleaseeee
 
         self.len = len(self.matrixDict)
         if s != None:

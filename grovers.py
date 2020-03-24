@@ -39,7 +39,7 @@ def Oracle(nq, s, Sparse = False):
     #Constructs the matrices representing the leftmost and rightmost operations
     L = op.constructGate(Neg, Sparse)
     #Constructs the nq-dimansional CNOT gate (middle layer)
-    Z = op.constructGate(f"{nq}Z", Sparse)
+    Z = op.constructGate(f"{nq}Z", Sparse)  #a code as '3X', means a controlled X gate acting on the smallest qubit.
     return op.matrixProduct(op.matrixProduct(L, Z), L)
 
 
@@ -152,17 +152,18 @@ def FrequencyPlot(freq, States):
 
     xaxis = list(range(0,len(States)))
     plt.bar(xaxis,freq, tick_label=States)
-    plt.ylabel("occurrences")
-    plt.xlabel("states")
+    plt.ylabel("Frequency of Occurance")
+    plt.xlabel("Basis States")
     plt.xticks(rotation=90)
-    plt.title("Plot of Occurrences of Each State")
+    plt.title(f"Frequency of Occurance for Each Basis State")
     for i in range (0, len(States)):
         plt.annotate(freq[i], xy=(i, freq[i]), ha='center', va='bottom')
+    plt.savefig('Plot of Frequencies')
     plt.show()
 
 
-def Observe_System(R, n, nq):
-    """ Observe the register R, n times.
+def Observe_System(R, k, nq):
+    """ Observe the register R, k times.
 
     This simulates the "Uncertainty" in the outcome of the observation.
 
@@ -178,9 +179,9 @@ def Observe_System(R, n, nq):
     ----------
     R : register.Register
         Custom register object.
-    n : int
+    k : int
         Number of times Grover's was "ran". Grover's doesn't actually have to be ran
-        n times, as the final amplitudes are definite.
+        k times, as the final amplitudes are definite.
     nq : int
         Number of quibits used to represent each state.
     """
@@ -189,13 +190,14 @@ def Observe_System(R, n, nq):
     States = [f"|{bin(i)[2:].zfill(nq)}>" for i in range(2**nq)]
     freq = []
 
-    for i in range(n):
+    for i in range(k):
         Obs.append(R.measure())
 
     for s in States:
         freq.append(Obs.count(s))
+    freq = np.array(freq)/k
 
-    print('\n' + f"# of Occurences of each state after measuring the system {n} times:")
+    print('\n' + f"# of Occurences of each state after measuring the system {k} times:")
     for i in range(len(freq)):
         print(f"{States[i]}: {freq[i]}")
     if nq <= 5:
