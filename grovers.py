@@ -81,7 +81,7 @@ def Diffuser(nq, Sparse = False):
     return op.matrixProduct(op.matrixProduct(L, Z), L)
 
 
-def Grovers(nq, s, cOut, Sparse = False):
+def Grovers(nq, s, cOut = False, Sparse = False, regList = False):
     """ Actual function running grover's algorithm.
 
     Capable of adapting gates dynamically depending on the mode and number of
@@ -89,10 +89,17 @@ def Grovers(nq, s, cOut, Sparse = False):
 
     Parameters
     ----------
-    nq : type
-        Description of parameter `nq`.
+    nq : int
+        Number of qubits per state.
     s : type
         Denary representation of state.
+    cOut : bool
+        Whether to print or not.
+    Sparse : bool
+        Whether to use sparse method or not.
+    regList : bool
+        Whether to output list of registers throughout iterations.
+        
 
     Returns
     -------
@@ -120,24 +127,32 @@ def Grovers(nq, s, cOut, Sparse = False):
         print("-------Initialising Register-------" + '\n')
     #pass an n-qbit determinate state 0
     R = re.Register(qs.State((0,nq)))
+    if regList:
+        regs = []
+        regs.append(R)
     start_time = time.time()
     #n-dimensional hadamard creates uniform superposition of states up until state(2**nq)
     R.applyGate(H, Sparse)
-
+    
     #Iterating -it times (most accurate order of iteration, ussually simply quoted as root(n))
     it = int(np.pi/(4*np.arcsin(1/np.sqrt(2**nq))))
     if cOut:
         print('\n'+ f"Running Grover's, {it} times:")
     for i in range(it):
+        if regList:
+            regs.append(R)
         R.applyGate(Orac, Sparse)
         R.applyGate(H, Sparse)
         R.applyGate(Diff, Sparse)
         R.applyGate(H, Sparse)
     Dt = time.time() - start_time
+    if regList:
+        regs.append(R)
+        return R, Dt, regs
     return R, Dt
 
 
-def FrequencyPlot(freq, States):
+def FrequencyPlot(States,freq):
     """Plots a graph of each state and how many times it was observed.
 
     Times selected is analogous to probability of being the 'correct' target state.
@@ -161,7 +176,7 @@ def FrequencyPlot(freq, States):
     plt.show()
 
 
-def Observe_System(R, n, nq):
+def ObserveSystem(R, nq):
     """ Observe the register R, n times.
 
     This simulates the "Uncertainty" in the outcome of the observation.
@@ -184,7 +199,7 @@ def Observe_System(R, n, nq):
     nq : int
         Number of quibits used to represent each state.
     """
-
+    n = int(np.pi/(4*np.arcsin(1/np.sqrt(2**nq))))
     Obs = []
     States = [f"|{bin(i)[2:].zfill(nq)}>" for i in range(2**nq)]
     freq = []
@@ -201,3 +216,10 @@ def Observe_System(R, n, nq):
     if nq <= 5:
         FrequencyPlot(freq, States)
     return (max(freq))
+
+
+def freqAnimation(regs):
+    pass
+
+
+ObserveSystem(Grovers(3,1,Sparse=True,regList=True)[0],4)
