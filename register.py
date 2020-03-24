@@ -14,8 +14,8 @@ class Register():
 
     Parameters
     ----------
-    input : type
-        Description of parameter `input`.
+    input : quantum_states.State
+        quantum state dynamically created elsewhere (grovers in our case).
 
     Attributes
     ----------
@@ -44,12 +44,6 @@ class Register():
     """
 
     def __init__(self,input, Sparse=False):
-        """
-        Parameters
-        ----------
-        input : quantum_states.State
-            quantum state dynamically created elsewhere (grovers in our case).
-        """
 
         self.qR = input     # Stores the input quantum register.
 
@@ -73,7 +67,7 @@ class Register():
         self.stateVector = op.vecMatProduct(gate, self.stateVector)
 
     def measure(self):
-        """returns a basis state of the register randonly, depending on amplitudes in stateVector
+        """ Returns a basis state of the register randonly, depending on amplitudes in stateVector
 
         Returns
         -------

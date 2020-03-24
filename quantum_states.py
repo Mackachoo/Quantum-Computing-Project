@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 """ Qubits interface for quantum computing.
 """
 
@@ -31,14 +28,13 @@ class QubitState(ABC):
     ket: Bool
         property dictating vector and string representation
 
-    Methods
-    -------
+    Methods (Abstract)
+    ------------------
     flip(self)
-        flip ket to a bra and viceversa
-    dotWith(self, ket)
-        dot operation between state's vector representation and another object
-    __str__(self)
-        represent state in string representation
+        override: flip ket to bra and viceversa
+    __str__
+        override: appropiate string representation of state
+
     """
 
     @abstractmethod
@@ -52,18 +48,12 @@ class QubitState(ABC):
 
     @abstractmethod
     def flip(self):
-        """ Flip the ket to a bra"""
-        self.ket = False
-
+        """ Flip the ket to a bra and viceversa"""
+        pass
     @abstractmethod
     def __str__(self):
         """ Ensure representation is appropiate"""
-
-        if self.ket == True:
-            return(f"|{self.strRep}>")
-        else:
-            return(f"<{self.strRep}|")
-
+        pass
 
 
 class State(QubitState):
@@ -101,6 +91,15 @@ class State(QubitState):
         binary representation of state as 0b___ e.g. |3> has bin = "0b11"
     strRep : str
         string representaiton of the state in dirac notation: |state>.
+
+    Methods
+    -------
+    flip(self)
+        flip ket to a bra and viceversa
+    dotWith(self, ket)
+        dot operation between state's vector representation and another object
+    __str__(self)
+        represent state in string representation
     """
 
     def __init__(self, values, ket=True):
@@ -126,9 +125,12 @@ class State(QubitState):
             self.strRep += str(val)
 
     def flip(self):
-        """ Flip the ket to a bra."""
-        self.ket = False
+        """ Flip the ket to a bra and viceversa"""
+        self.ket = not self.ket
 
     def __str__(self):
-        """ Ensure representation is appropiate"""
-        return super().__str__()
+        """ Appropiate string representation of state. Dirac notation"""
+        if self.ket == True:
+            return(f"|{self.strRep}>")
+        else:
+            return(f"<{self.strRep}|")
