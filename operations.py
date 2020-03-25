@@ -4,6 +4,7 @@ import math as m
 from time import time
 import sparse as sp
 
+#Hard-coded basic gates (for 1 qubit)
 gates = {
 
     'H' : 1/m.sqrt(2)*np.array([[1,1],
@@ -17,6 +18,7 @@ gates = {
                     [0,-1]])
 }
 
+#Hard-coded basic gates (for 1 qubit), in sparse form
 sgates = {
 
     'H' : sp.Sparse(gates['H']),
@@ -285,13 +287,16 @@ def vecMatProduct(mat,vec):
 def constructGate(code, Sparse = False):
     """ Function constructing matrix representing gate dynamically
 
-    Works by parsing a carefully formatted string representing the gate
+    Works by parsing a carefully formatted string (code), with characters representing the gate
     at each qubit and returns an array representing the operation
+    First character is the gate to be applied to the most significant qubit, etc.
+    i.e. the code "HHI" represents the operation HxHxI(qubit1xqubit2xqubit3)
+    where x denotes the tensor product
 
     Parameters
     ----------
     code : str
-        Sequence/"code" used to generate specific gate matrix.
+        Sequence/"code" used to generate specific paralel gate.
 
     Returns
     -------

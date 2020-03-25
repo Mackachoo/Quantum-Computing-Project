@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-""" Qubits interface for quantum computing.
+""" Basis State interface for quantum computing.
 """
 
 from abc import ABC, abstractmethod
@@ -67,7 +67,7 @@ class QubitState(ABC):
 
 
 class State(QubitState):
-    """Class representing a multi-qubit ket(state) in the computational (z) basis.
+    """Class representing a multi-qubit ket (basis state) in the computational (z) basis.
 
     -Note: We use the normal binary convention that the least significant
      qubit is on the right, so |00001> has a 1 in the least significant qubit.
@@ -85,18 +85,18 @@ class State(QubitState):
     values : tuple
         tuple of (state, no. of qubits)
             First element is the representation of the state in denary,
-            second element is the dimensionality of our state space.
-            e.g: (1, 4) = [0,0,0,1]
+            second element is the number of qubits.
+            e.g: (1, 4) = |0001>
     strRep : str
-        string representation of superposition of states.
+        string representation of state.
     ket: Bool
         property dictating vector and string representation
     d : int
-        dimensionality of state, i.e. qubits used to represent it.
+        qubits used to represent the state
     den : int
-        denary representation of state, i.e. |011> has den = 3.
+        denary representation of state, e.g. |011> has den = 3.
     vec : numpy array
-        list of qubits representing state as vector.
+        list of qubits representing the state vector, e.g. |01> = [0,1,0,0]
     bin : str
         binary representation of state as 0b___ e.g. |3> has bin = "0b11"
     strRep : str

@@ -8,16 +8,16 @@ import time
 def Oracle(nq, s, Sparse = False):
     """ Function that dynamically creates the oracle gate
 
-    Using deterministic algorithm for mode s, with number of qubits nq,
+    Using deterministic algorithm for target state s, with number of qubits nq,
     function creates a matrix made up from lower-level gates which serves as
-    the oracle gate when applied to an entangled quantum register.
+    the oracle gate when applied to the state vector of the quantum register.
 
     Parameters
     ----------
     nq : int
-        Number of qubits per state.
+        Number of qubits per register.
     s : int
-        Denary representation of state the gate is applied to.
+        Denary representation of target state.
 
     Returns
     -------
@@ -28,8 +28,8 @@ def Oracle(nq, s, Sparse = False):
     """
     #takes binary representation of state and formats it to construct gate
     Tr = bin(s)[2:].zfill(nq)
-    Neg = ""        #Stores the code for the Left
-                    #and Rightmost layers (i.e. for |0> we get all 'XX')
+    Neg = ""        #Stores the code for the first
+                    #and last layers (i.e. for |0> we get all 'XX')
     for i in Tr:
         if i == '0':
             Neg+="X"
@@ -39,17 +39,17 @@ def Oracle(nq, s, Sparse = False):
     #Constructs the matrices representing the leftmost and rightmost operations
     L = op.constructGate(Neg, Sparse)
     #Constructs the nq-dimansional CNOT gate (middle layer)
-    Z = op.constructGate(f"{nq}Z", Sparse)  #a code as '3X', means a controlled X gate acting on the smallest qubit.
+    Z = op.constructGate(f"{nq}Z", Sparse)  #a code as '3X', means a controlled X gate acting on the smallest qubit (essentially a Toffoli in this case).
     return op.matrixProduct(op.matrixProduct(L, Z), L)
 
 
 def Hadamard(nq, Sparse = False):
-    """ Constructs the Hadamard gate (that is to be applied to all qubits)
+    """ Constructs the paralel nq-Hadamard gate (that is to be applied to all qubits)
 
     Parameters
     ----------
     nq : int
-        Number of qubits per state.
+        Number of qubits in register.
 
     Returns
     -------
@@ -68,7 +68,7 @@ def Diffuser(nq, Sparse = False):
     Parameters
     ----------
     nq : int
-        Number of qubits per state.
+        Number of qubits in register.
 
     Returns
     -------
@@ -84,7 +84,7 @@ def Diffuser(nq, Sparse = False):
 def Grovers(nq, s, cOut, Sparse = False):
     """ Actual function running grover's algorithm.
 
-    Capable of adapting gates dynamically depending on the mode and number of
+    Capable of adapting gates dynamically depending on the target state and number of
     qubits selected by user.
 
     Parameters
@@ -138,7 +138,7 @@ def Grovers(nq, s, cOut, Sparse = False):
 
 
 def FrequencyPlot(freq, States):
-    """Plots a graph of each state and how many times it was observed.
+    """Plots a graph of each basis state and how many times it was observed.
 
     Times selected is analogous to probability of being the 'correct' target state.
 
@@ -170,7 +170,7 @@ def Observe_System(R, k, nq):
     As the state of the system before observing it, is definite, we don't need
     to run Grover's each time. Just simulate the final measurement using
     the register.measure() method, that implements a Monte-Carlo approach to choose
-    which state the system is going to collapse to when measuring it.
+    which state the system is going to "collapse" to when measuring it.
 
     Calls for plot of measurements at the end.
 
@@ -180,8 +180,8 @@ def Observe_System(R, k, nq):
     R : register.Register
         Custom register object.
     k : int
-        Number of times Grover's was "ran". Grover's doesn't actually have to be ran
-        k times, as the final amplitudes are definite.
+        Number of times Grover's will be "ran". Grover's doesn't actually have to be ran
+        k times, as the final amplitudes are definite, for a set target state
     nq : int
         Number of quibits used to represent each state.
     """
