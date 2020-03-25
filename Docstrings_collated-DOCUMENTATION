@@ -400,3 +400,34 @@ for register.py:
       self.signVector = [-0.2, 0.9], and
       self.qbitVector = [Register(0,1), Register(1,1)] (i.e. a list of pure "states" [|0>, |1>])
       """
+
+...................................................................................................
+
+for sparse.py:
+  class Sparse():
+      """ Class used for custom handling of sparse matrices.
+
+      Parameters
+      ----------
+      m : numpy array or dictionary
+          normal sparse matrix (including 0s) to convert to efficient representation.
+      s : tuple
+          optional (default None), denotes size of matrix (width, height).
+
+      Attributes
+      ----------
+      matrixDict : dictionary
+          efficient representation of sparse matrix as dictionary.
+      len : int
+          length of matrixDict, i.e. number of key:value pairs (non-zero elements).
+      size : tuple
+          stores size of original matrix, i.e. including 0s, as (width, height).
+
+      Methods
+      -------
+      asMatrix(self)
+          returns original matrix as a numpy array, i.e including 0 elements.
+      __str__(self)
+          string representation of the sparse matrix. I.e as original numpy array
+          stringified and including 0 elements.
+      """

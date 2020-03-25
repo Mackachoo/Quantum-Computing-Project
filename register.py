@@ -14,8 +14,8 @@ class Register():
 
     Parameters
     ----------
-    input : type
-        Description of parameter `input`.
+    input : quantum_states.State
+        quantum state dynamically created elsewhere (grovers in our case).
 
     Attributes
     ----------
