@@ -288,7 +288,7 @@ def constructGate(code, Sparse = False):
     """ Function constructing matrix representing gate dynamically
 
     Works by parsing a carefully formatted string (code), with characters representing the gate
-    at each qubit and returns an array representing the operation
+    at each qubit and returns the operation as a matrix.
     First character is the gate to be applied to the most significant qubit, etc.
     i.e. the code "HHI" represents the operation HxHxI(qubit1xqubit2xqubit3)
     where x denotes the tensor product
@@ -305,34 +305,34 @@ def constructGate(code, Sparse = False):
         effect as applying the theoretical quantum gate.
     """
 
-    matrix = np.array([[1]])
+    matrix = np.array([[1]])        # This is starts by making a 1x1 identity matrix so the first kronecker product is the first gate.
     if Sparse:
-        matrix = sp.Sparse(matrix)
-    TofN = 0
+        matrix = sp.Sparse(matrix)  # If sparse makes the matrix sparse.
+    TofN = 0                        # This is for storing the control number, number of qubits that are connected to the controlled gate eg: CCNot Gate => 3X.
     for char in code:
-        if char.isdigit():
+        if char.isdigit():          # Sets the control number.
             TofN = int(str(TofN)+char)
-        elif TofN != 0:
-            if Sparse:
-                gate = sgates[char]
-                l = 2**TofN-gate.size[0]
-                Tof = sp.Sparse(np.identity(l), (l+gate.size[0],l+gate.size[0]))
-                for pos in gate.matrixDict:
+        elif TofN != 0:             # If a control number was set this creatses the controlled gate matrix
+            if Sparse:              # Two methods for sparse or not.
+                gate = sgates[char]             # Gets the sparse gate matrix from dictioanary.
+                l = 2**TofN-gate.size[0]        # These two lines create and identity sparse matrix but then force it to be 2x2 longer.
+                Tof = sp.Sparse(np.identity(l), (l+gate.size[0],l+gate.size[0]))    # sp.Sparse takes two parameters; a matrix and a double this being the shape.
+                for pos in gate.matrixDict:                                         # This part adds the sparse gate matrix to the new forced sparse identiy.
                     Tof.matrixDict[((Tof.size[0])-(gate.size[0])+pos[0]%(gate.size[0]) \
                      , (Tof.size[1])-(gate.size[1])+pos[1]%(gate.size[1]))] \
                       = gate.matrixDict[(pos[0]%(gate.size[0]),pos[1]%(gate.size[1]))]
             else:
-                Tof = np.identity(2**TofN)
-                gate = gates[char]
-                for x in range(len(gates)):
+                Tof = np.identity(2**TofN)          # For non sparse we start with an identity.
+                gate = gates[char]                  # Gets gate from dictionary
+                for x in range(len(gates)):         # This adds the 2x2 gate matrix to the end of the identity. 
                     for y in range(len(gates)):
                         Tof[len(Tof)-len(gate)+x%len(gate)][len(Tof)-len(gate) \
                         +y%len(gate)] = gate[x%len(gate)][y%len(gate)]
-            matrix = kroneckerProduct(matrix,Tof)
+            matrix = kroneckerProduct(matrix,Tof)       # Whether sparse or not this does the kronecker product of the existing matrix with the new controlled gate matrix.
             TofN = 0
-        else:
-            if Sparse:
-                matrix = kroneckerProduct(matrix,sgates[char])
+        else:                   # This is the main part if there is no control element.. 
+            if Sparse:          # This changes the gate dictionary depending on whether we are using sparse matrices or not.
+                matrix = kroneckerProduct(matrix,sgates[char])      # Then whether we are sparse or not it does the kronecker product on the matrix.
             else:
                 matrix = kroneckerProduct(matrix,gates[char])
     return matrix
